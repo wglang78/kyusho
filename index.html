@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kyusho Lernatlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+@media (prefers-reduced-motion:no-preference){.cyc{stroke-dasharray:6 5;animation:flow 1.2s linear infinite}}
+@keyframes flow{to{stroke-dashoffset:-11}}
+/* Layout: dark dojo world like the slide decks — black ground, one orange accent, slim tracked caps for headings; sticky tab bar, one view at a time */
+:root{
+  --bg:#0c0c0c;
+  --panel:#161514;
+  --line:#2d2a27;
+  --ink:#f1ece6;
+  --muted:#a39b92;
+  --accent:#ed7d31;
+  --accent-ink:#1a0f06;
+  --ok:#5fb37a;
+  --bad:#e0605a;
+  --display:"Jost","Futura","Avenir Next","Helvetica Neue",sans-serif;
+  --body:"Source Sans 3","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:var(--accent)}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--display);font-weight:300;text-wrap:balance;margin:0}
+h2{font-size:1.9rem;letter-spacing:.02em}
+h3{font-size:1.25rem;font-weight:400}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.prose{max-width:68ch;display:grid;gap:.8rem;color:#ddd6ce}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:linear-gradient(90deg,#000 55%,#1b130d)}
+.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:26px 0 18px;flex-wrap:wrap}
+.brand .bar{width:34px;height:5px;background:var(--accent);margin-bottom:14px}
+.brand h1{font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:.32em;text-transform:uppercase}
+.brand .sub{font-family:var(--display);letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-size:.85rem;margin-top:4px}
+.brand .stat{font-family:var(--display);color:var(--muted);font-size:.9rem;text-align:right}
+.brand .stat b{color:var(--accent);font-weight:500;font-size:1.4rem;font-variant-numeric:tabular-nums}
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(12,12,12,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;padding:14px 14px 12px;color:var(--muted);text-decoration:none;font-family:var(--display);letter-spacing:.12em;text-transform:uppercase;font-size:.82rem;border-bottom:3px solid transparent}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+main{padding:34px 0 80px}
+section.view{display:none}
+section.view.on{display:grid;gap:30px}
+.head{display:grid;gap:8px}
+.head .eyebrow{font-family:var(--display);color:var(--accent);letter-spacing:.2em;text-transform:uppercase;font-size:.8rem}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:20px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g5{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+
+/* rules */
+.rule{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
+.rule .n{font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1;grid-row:span 2}
+.rule h3{font-size:1.05rem;font-weight:500}
+.rule p{color:#cfc7be;font-size:.95rem}
+
+/* belt ladder */
+.ladder{display:grid;gap:8px}
+.rung{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.rung:hover{border-color:#4a443e}
+.belt{height:12px;border-radius:2px;border:1px solid rgba(255,255,255,.18)}
+.rung .t{font-family:var(--display);font-size:1.05rem}
+.rung .t small{color:var(--muted);font-family:var(--body);font-size:.85rem;margin-left:8px}
+.rung .go{color:var(--muted);font-size:.85rem}
+
+/* elements */
+.el{border-top:4px solid var(--c);}
+.el h3{display:flex;justify-content:space-between;align-items:baseline}
+.el h3 span{font-size:.8rem;color:var(--muted);font-family:var(--body)}
+.el dl{display:grid;grid-template-columns:1fr;gap:2px;margin:12px 0 0;font-size:.92rem}
+.el dt{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+.el dd{margin:0}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:400;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;color:var(--muted);background:#121110}
+tr:last-child td{border-bottom:none}
+td.code{font-family:var(--display);color:var(--accent);white-space:nowrap;font-weight:500}
+.tnum{font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:.78rem;border:1px solid var(--line);white-space:nowrap}
+.pill.yin{background:#1d2333;border-color:#34405e}
+.pill.yang{background:#3a2412;border-color:#6b3c18}
+
+/* organ clock */
+.clockwrap{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:24px;align-items:center}
+@media (max-width:760px){.clockwrap{grid-template-columns:1fr}}
+#clock{width:100%;height:auto}
+
+/* callouts */
+.callout{border-left:4px solid var(--accent);padding:14px 18px;background:#1b1612;border-radius:0 6px 6px 0}
+.callout b{color:var(--accent)}
+ol.steps{margin:0;padding-left:1.3rem;display:grid;gap:8px}
+ol.steps li::marker{color:var(--accent);font-family:var(--display)}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:#121110;color:var(--muted);border-radius:99px;padding:5px 12px;font:inherit;font-size:.86rem;cursor:pointer}
+.chip:hover{color:var(--ink);border-color:#4a443e}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+input[type="search"],select{background:#121110;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px 12px;font:inherit;font-size:.95rem}
+input[type="search"]{min-width:240px;flex:1}
+label.lbl{font-size:.82rem;color:var(--muted);font-family:var(--display);letter-spacing:.1em;text-transform:uppercase}
+.btn{background:var(--accent);color:var(--accent-ink);border:none;border-radius:6px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:#5a534c}
+.btn.ok{background:var(--ok);color:#06140b}
+.btn.bad{background:var(--bad);color:#1b0605}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* point cards */
+.pcards{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.pc{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.pc .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--accent);color:var(--accent-ink)}
+.pc .ph b{font-family:var(--display);font-size:1.25rem;font-weight:500}
+.pc .ph span{font-size:.8rem;font-weight:600}
+.pc dl{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;padding:14px;margin:0;font-size:.93rem}
+.pc dt{color:var(--muted)}
+.pc dd{margin:0}
+.pc dd.warn{color:#ffb38a}
+.pc .badge{font-size:.72rem;background:rgba(0,0,0,.25);padding:2px 8px;border-radius:99px}
+
+/* figure with markers */
+.fig{position:relative;background:#000;line-height:0}
+.fig img{width:100%;height:auto}
+.mk{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid var(--accent);background:rgba(237,125,49,.35);box-shadow:0 0 0 3px rgba(0,0,0,.55);pointer-events:none}
+.fig.hide .mk{display:none}
+.fig .figbtn{position:absolute;right:8px;bottom:8px;line-height:1.2;font-size:.8rem;padding:5px 10px;border-radius:99px;background:rgba(0,0,0,.75);color:var(--ink);border:1px solid #555;cursor:pointer}
+@media (prefers-reduced-motion:no-preference){.mk{animation:pulse 1.6s ease-in-out infinite}}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(237,125,49,.18)}}
+
+/* flashcard */
+.fc-area{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:20px;align-items:start}
+@media (max-width:820px){.fc-area{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;min-height:340px;display:grid;grid-template-rows:auto 1fr auto}
+.card .cq{padding:22px 24px;border-bottom:1px solid var(--line);display:grid;gap:6px}
+.card .cq .big{font-family:var(--display);font-size:2.4rem;color:var(--accent);line-height:1.1}
+.card .cq .ask{color:var(--muted)}
+.card .ca{padding:20px 24px;display:grid;gap:14px;align-content:start}
+.card .ca.hidden>*{visibility:hidden}
+.card .ca.hidden{position:relative}
+.card .ca.hidden::after{content:"Erst selbst überlegen, dann aufdecken";position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-style:italic}
+.card .cf{padding:14px 24px 18px;border-top:1px solid var(--line);display:grid;gap:10px}
+.card .cf .btn{width:100%;padding:14px 18px;font-size:1.05rem}
+.fcgrade{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn.blue{background:#3b82e0;color:#fff}
+.btn.blue:hover:not(:disabled){background:#4c90ea}
+.kbd{font-size:.72rem;font-weight:400;opacity:.75;margin-left:8px;border:1px solid rgba(255,255,255,.4);border-radius:4px;padding:1px 6px}
+.ans dl{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;margin:0}
+.ans dt{color:var(--muted)}
+.ans dd{margin:0}
+.ans .focus{font-size:1.15rem}
+.boxes{display:grid;gap:8px}
+.boxrow{display:grid;grid-template-columns:80px 1fr 34px;gap:8px;align-items:center;font-size:.88rem}
+.boxrow .track{height:8px;background:#211f1d;border-radius:4px;overflow:hidden}
+.boxrow .track i{display:block;height:100%;background:var(--accent)}
+.boxrow b{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* quiz */
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:22px 24px;display:grid;gap:16px}
+.qtop{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums}
+.qprog{height:4px;background:#211f1d;border-radius:2px;overflow:hidden}
+.qprog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.qtext{font-size:1.2rem;font-weight:600}
+.qtext em{font-style:normal;color:var(--accent)}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#121110;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:12px 14px;font:inherit;cursor:pointer;display:flex;gap:12px;align-items:baseline}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt .k{font-family:var(--display);color:var(--muted);min-width:1.2em}
+.opt.right{border-color:var(--ok);background:#13261a}
+.opt.wrong{border-color:var(--bad);background:#2a1312}
+.opt:disabled{cursor:default}
+.qimg{max-width:520px}
+.feedback{font-size:.95rem;color:#d8d0c8}
+.score{font-family:var(--display);font-size:3rem;color:var(--accent);line-height:1}
+
+/* exam */
+.exam-sel{display:flex;flex-wrap:wrap;gap:6px}
+.exam-sel button{display:flex;align-items:center;gap:8px}
+.exam-sel .sw{width:16px;height:8px;border-radius:2px;border:1px solid rgba(255,255,255,.25)}
+.exam4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.exam4 .panel h3{font-size:1rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+.exam4 .panel h3 small{font-family:var(--body);text-transform:none;letter-spacing:0;color:var(--muted);font-size:.78rem}
+.exam4 ul{margin:0;padding-left:1.1rem;display:grid;gap:4px;font-size:.94rem}
+.exam4 li.new{color:var(--accent)}
+.exam4 .pts{display:grid;gap:6px;font-size:.92rem}
+.exam4 .pts div b{font-family:var(--display);font-weight:500;margin-right:6px}
+.exam4 .pts div.new b{color:var(--accent)}
+.legend{font-size:.84rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:2px;margin-right:6px}
+
+.anim{position:relative;aspect-ratio:4/5;max-height:460px;background:radial-gradient(ellipse at 50% 40%,#1d1916,#090807 75%);overflow:hidden}
+.anim svg{width:100%;height:100%;display:block}
+.anim .mini{position:absolute;top:8px;right:8px;width:58px;height:auto;aspect-ratio:auto;background:rgba(10,9,8,.85);border:1px solid var(--line);border-radius:4px;padding:3px}
+.vbadge{display:inline-block;font-family:var(--display);font-weight:500;letter-spacing:.12em;text-transform:uppercase;font-size:.72rem;padding:2px 8px;border-radius:99px;margin-right:6px;color:#111}
+.v-front{background:#f1ece6}.v-back{background:#7f8fa6}.v-head{background:#d9b13b}.v-sole{background:#c9a48a}
+.animcap{align-items:center}
+.animtag{position:absolute;top:8px;left:10px;font-family:var(--display);font-size:1.05rem;color:var(--ink);line-height:1.1;text-shadow:0 1px 3px #000}
+.animtag small{display:block;font-family:var(--body);font-size:.72rem;color:var(--muted)}
+.animcap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;padding:6px 10px;font-size:.74rem;color:var(--muted);background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.media .mtabs{display:flex;gap:0;border-bottom:1px solid var(--line)}
+.media .mtabs button{flex:1;background:#121110;border:none;color:var(--muted);padding:7px;font:inherit;font-size:.82rem;cursor:pointer}
+.media .mtabs button[aria-pressed="true"]{background:#1f1915;color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+.media[data-show="anim"] .m-img,.media[data-show="img"] .m-anim{display:none}
+.qimg .anim{max-height:380px}
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--muted);font-size:.85rem}
+.empty{color:var(--muted);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:6px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs><linearGradient id="skin" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#3a2d25"/><stop offset=".5" stop-color="#4d3c31"/><stop offset="1" stop-color="#3a2d25"/></linearGradient><radialGradient id="skin2" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#4d3c31"/><stop offset="1" stop-color="#33271f"/></radialGradient>
+<symbol id="sym-front" viewBox="0 0 240 460"><path d="M128,58 C130.8,60.3 127.0,68.7 129,72 C131.0,75.3 135.5,76.3 140,78 C144.5,79.7 151.3,80.7 156,82 C160.7,83.3 164.7,83.7 168,86 C171.3,88.3 174.0,92.0 176,96 C178.0,100.0 178.3,103.7 180,110 C181.7,116.3 183.8,126.0 186,134 C188.2,142.0 191.0,151.3 193,158 C195.0,164.7 196.5,167.7 198,174 C199.5,180.3 200.3,187.7 202,196 C203.7,204.3 206.3,215.3 208,224 C209.7,232.7 210.5,242.7 212,248 C213.5,253.3 215.3,253.7 217,256 C218.7,258.3 220.5,259.7 222,262 C223.5,264.3 225.5,267.5 226,270 C226.5,272.5 226.0,276.5 225,277 C224.0,277.5 221.0,271.8 220,273 C219.0,274.2 219.5,280.5 219,284 C218.5,287.5 218.2,291.8 217,294 C215.8,296.2 213.7,296.8 212,297 C210.3,297.2 208.5,296.5 207,295 C205.5,293.5 204.0,291.2 203,288 C202.0,284.8 201.5,281.3 201,276 C200.5,270.7 201.5,265.0 200,256 C198.5,247.0 194.7,232.0 192,222 C189.3,212.0 186.3,203.0 184,196 C181.7,189.0 179.7,186.0 178,180 C176.3,174.0 175.7,167.0 174,160 C172.3,153.0 169.8,144.7 168,138 C166.2,131.3 163.7,119.7 163,120 C162.3,120.3 163.7,133.3 164,140 C164.3,146.7 165.7,152.3 165,160 C164.3,167.7 160.7,178.3 160,186 C159.3,193.7 160.0,198.7 161,206 C162.0,213.3 164.5,222.7 166,230 C167.5,237.3 171.0,240.0 170,250 C169.0,260.0 163.0,278.3 160,290 C157.0,301.7 153.7,312.3 152,320 C150.3,327.7 150.0,329.3 150,336 C150.0,342.7 152.0,351.3 152,360 C152.0,368.7 151.5,378.0 150,388 C148.5,398.0 143.8,413.0 143,420 C142.2,427.0 143.8,427.0 145,430 C146.2,433.0 149.2,435.7 150,438 C150.8,440.3 151.7,442.7 150,444 C148.3,445.3 143.7,445.8 140,446 C136.3,446.2 130.3,446.3 128,445 C125.7,443.7 125.8,441.2 126,438 C126.2,434.8 129.0,431.7 129,426 C129.0,420.3 126.8,413.0 126,404 C125.2,395.0 123.8,381.0 124,372 C124.2,363.0 126.5,356.3 127,350 C127.5,343.7 127.2,340.7 127,334 C126.8,327.3 126.5,319.0 126,310 C125.5,301.0 124.8,288.0 124,280 C123.2,272.0 121.7,265.3 121,262 C120.3,258.7 120.3,260.0 120,260 C119.7,260.0 119.7,258.7 119,262 C118.3,265.3 116.8,272.0 116,280 C115.2,288.0 114.5,301.0 114,310 C113.5,319.0 113.2,327.3 113,334 C112.8,340.7 112.5,343.7 113,350 C113.5,356.3 115.8,363.0 116,372 C116.2,381.0 114.8,395.0 114,404 C113.2,413.0 111.0,420.3 111,426 C111.0,431.7 113.8,434.8 114,438 C114.2,441.2 114.3,443.7 112,445 C109.7,446.3 103.7,446.2 100,446 C96.3,445.8 91.7,445.3 90,444 C88.3,442.7 89.2,440.3 90,438 C90.8,435.7 93.8,433.0 95,430 C96.2,427.0 97.8,427.0 97,420 C96.2,413.0 91.5,398.0 90,388 C88.5,378.0 88.0,368.7 88,360 C88.0,351.3 90.0,342.7 90,336 C90.0,329.3 89.7,327.7 88,320 C86.3,312.3 83.0,301.7 80,290 C77.0,278.3 71.0,260.0 70,250 C69.0,240.0 72.5,237.3 74,230 C75.5,222.7 78.0,213.3 79,206 C80.0,198.7 80.7,193.7 80,186 C79.3,178.3 75.7,167.7 75,160 C74.3,152.3 75.7,146.7 76,140 C76.3,133.3 77.7,120.3 77,120 C76.3,119.7 73.8,131.3 72,138 C70.2,144.7 67.7,153.0 66,160 C64.3,167.0 63.7,174.0 62,180 C60.3,186.0 58.3,189.0 56,196 C53.7,203.0 50.7,212.0 48,222 C45.3,232.0 41.5,247.0 40,256 C38.5,265.0 39.5,270.7 39,276 C38.5,281.3 38.0,284.8 37,288 C36.0,291.2 34.5,293.5 33,295 C31.5,296.5 29.7,297.2 28,297 C26.3,296.8 24.2,296.2 23,294 C21.8,291.8 21.5,287.5 21,284 C20.5,280.5 21.0,274.2 20,273 C19.0,271.8 16.0,277.5 15,277 C14.0,276.5 13.5,272.5 14,270 C14.5,267.5 16.5,264.3 18,262 C19.5,259.7 21.3,258.3 23,256 C24.7,253.7 26.5,253.3 28,248 C29.5,242.7 30.3,232.7 32,224 C33.7,215.3 36.3,204.3 38,196 C39.7,187.7 40.5,180.3 42,174 C43.5,167.7 45.0,164.7 47,158 C49.0,151.3 51.8,142.0 54,134 C56.2,126.0 58.3,116.3 60,110 C61.7,103.7 62.0,100.0 64,96 C66.0,92.0 68.7,88.3 72,86 C75.3,83.7 79.3,83.3 84,82 C88.7,80.7 95.5,79.7 100,78 C104.5,76.3 109.0,75.3 111,72 C113.0,68.7 109.2,60.3 112,58 C114.8,55.7 125.2,55.7 128,58Z" fill="url(#skin)" stroke="#8a7464" stroke-width="1.1"/><ellipse cx="120" cy="36" rx="18.5" ry="22.5" fill="url(#skin)" stroke="#8a7464" stroke-width="1"/><ellipse cx="101.5" cy="38" rx="3" ry="6" fill="#4a3b32" stroke="#8a7464" stroke-width=".7"/><ellipse cx="138.5" cy="38" rx="3" ry="6" fill="#4a3b32" stroke="#8a7464" stroke-width=".7"/><g><g fill="none" stroke="#7a675a" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M122,84 Q140,79 160,86"/>
+ <path d="M121,98 Q123,133 142,134 Q156,133 162,118"/>
+ <path d="M134,142 Q139,180 135,222"/><path d="M121,160 h13 M121,178 h14 M121,196 h13"/>
+ <path d="M152,142 q6,4 10,2 M151,152 q6,4 10,2" stroke-width=".55"/>
+ <path d="M160,212 Q150,226 140,227"/>
+ <path d="M150,282 Q146,305 143,320 M130,282 Q135,305 135,320" stroke-width=".55"/>
+ <ellipse cx="138" cy="330" rx="6" ry="8"/>
+ <path d="M141,346 Q143,380 138,418" stroke-width=".55"/>
+ <path d="M204,268 Q212,264 219,266 M203,276 Q210,272 217,274" stroke-width=".55"/>
+ <path d="M207,284 L207,294 M211,285 L212,296 M215,283 L216,293" stroke-width=".55"/>
+ <path d="M217,258 Q214,266 216,272" stroke-width=".55"/>
+ <path d="M128,64 Q127,72 124,80" stroke-width=".55"/>
+</g>
+<circle cx="144" cy="128" r="1.8" fill="#7a5a4a"/>
+<g fill="#4a3b32" stroke="#8a7464" stroke-width=".5"><circle cx="129" cy="445" r="2.2"/><circle cx="134" cy="446" r="2"/><circle cx="138.5" cy="446" r="1.9"/><circle cx="142.5" cy="445" r="1.8"/><circle cx="146.5" cy="443" r="1.7"/></g>
+<path d="M120,227 L165,227 L169,250 L160,262 L126,264 L121,258Z" fill="#1f2b3a" stroke="#3a4a5e" stroke-width=".8"/></g><g transform="translate(240,0) scale(-1,1)"><g fill="none" stroke="#7a675a" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M122,84 Q140,79 160,86"/>
+ <path d="M121,98 Q123,133 142,134 Q156,133 162,118"/>
+ <path d="M134,142 Q139,180 135,222"/><path d="M121,160 h13 M121,178 h14 M121,196 h13"/>
+ <path d="M152,142 q6,4 10,2 M151,152 q6,4 10,2" stroke-width=".55"/>
+ <path d="M160,212 Q150,226 140,227"/>
+ <path d="M150,282 Q146,305 143,320 M130,282 Q135,305 135,320" stroke-width=".55"/>
+ <ellipse cx="138" cy="330" rx="6" ry="8"/>
+ <path d="M141,346 Q143,380 138,418" stroke-width=".55"/>
+ <path d="M204,268 Q212,264 219,266 M203,276 Q210,272 217,274" stroke-width=".55"/>
+ <path d="M207,284 L207,294 M211,285 L212,296 M215,283 L216,293" stroke-width=".55"/>
+ <path d="M217,258 Q214,266 216,272" stroke-width=".55"/>
+ <path d="M128,64 Q127,72 124,80" stroke-width=".55"/>
+</g>
+<circle cx="144" cy="128" r="1.8" fill="#7a5a4a"/>
+<g fill="#4a3b32" stroke="#8a7464" stroke-width=".5"><circle cx="129" cy="445" r="2.2"/><circle cx="134" cy="446" r="2"/><circle cx="138.5" cy="446" r="1.9"/><circle cx="142.5" cy="445" r="1.8"/><circle cx="146.5" cy="443" r="1.7"/></g>
+<path d="M120,227 L165,227 L169,250 L160,262 L126,264 L121,258Z" fill="#1f2b3a" stroke="#3a4a5e" stroke-width=".8"/></g><path d="M120,140 L120,226" fill="none" stroke="#7a675a" stroke-width=".8"/>
+<ellipse cx="120" cy="200" rx="1.6" ry="2.2" fill="#5a4337"/>
+<path d="M120,227 L120,250" fill="none" stroke="#3a4a5e" stroke-width=".8"/><path d="M98,229 h44" fill="none" stroke="#3a4a5e" stroke-width="1.6"/>
+<path d="M101,32 C99,14 110,11 120,11 C131,11 141,14 139,32 C135,22 127,19 120,20 C113,19 105,22 101,32Z" fill="#241c17"/>
+<g fill="none" stroke="#c9b7a6" stroke-width=".9" stroke-linecap="round">
+ <path d="M109,30 q4,-2 8,0 M123,30 q4,-2 8,0"/>
+ <path d="M120,36 L118,44 Q120,46 122,45" stroke-width=".7"/>
+ <path d="M115,51 Q120,53.5 125,51"/>
+</g>
+<ellipse cx="113" cy="34.5" rx="3" ry="1.5" fill="#e8ddd2"/><ellipse cx="127" cy="34.5" rx="3" ry="1.5" fill="#e8ddd2"/>
+<circle cx="113" cy="34.5" r="1" fill="#2a1f19"/><circle cx="127" cy="34.5" r="1" fill="#2a1f19"/></symbol>
+<symbol id="sym-back" viewBox="0 0 240 460"><path d="M128,58 C130.8,60.3 127.0,68.7 129,72 C131.0,75.3 135.5,76.3 140,78 C144.5,79.7 151.3,80.7 156,82 C160.7,83.3 164.7,83.7 168,86 C171.3,88.3 174.0,92.0 176,96 C178.0,100.0 178.3,103.7 180,110 C181.7,116.3 183.8,126.0 186,134 C188.2,142.0 191.0,151.3 193,158 C195.0,164.7 196.5,167.7 198,174 C199.5,180.3 200.3,187.7 202,196 C203.7,204.3 206.3,215.3 208,224 C209.7,232.7 210.5,242.7 212,248 C213.5,253.3 215.3,253.7 217,256 C218.7,258.3 220.5,259.7 222,262 C223.5,264.3 225.5,267.5 226,270 C226.5,272.5 226.0,276.5 225,277 C224.0,277.5 221.0,271.8 220,273 C219.0,274.2 219.5,280.5 219,284 C218.5,287.5 218.2,291.8 217,294 C215.8,296.2 213.7,296.8 212,297 C210.3,297.2 208.5,296.5 207,295 C205.5,293.5 204.0,291.2 203,288 C202.0,284.8 201.5,281.3 201,276 C200.5,270.7 201.5,265.0 200,256 C198.5,247.0 194.7,232.0 192,222 C189.3,212.0 186.3,203.0 184,196 C181.7,189.0 179.7,186.0 178,180 C176.3,174.0 175.7,167.0 174,160 C172.3,153.0 169.8,144.7 168,138 C166.2,131.3 163.7,119.7 163,120 C162.3,120.3 163.7,133.3 164,140 C164.3,146.7 165.7,152.3 165,160 C164.3,167.7 160.7,178.3 160,186 C159.3,193.7 160.0,198.7 161,206 C162.0,213.3 164.5,222.7 166,230 C167.5,237.3 171.0,240.0 170,250 C169.0,260.0 163.0,278.3 160,290 C157.0,301.7 153.7,312.3 152,320 C150.3,327.7 150.0,329.3 150,336 C150.0,342.7 152.0,351.3 152,360 C152.0,368.7 151.5,378.0 150,388 C148.5,398.0 143.8,413.0 143,420 C142.2,427.0 143.8,427.0 145,430 C146.2,433.0 149.2,435.7 150,438 C150.8,440.3 151.7,442.7 150,444 C148.3,445.3 143.7,445.8 140,446 C136.3,446.2 130.3,446.3 128,445 C125.7,443.7 125.8,441.2 126,438 C126.2,434.8 129.0,431.7 129,426 C129.0,420.3 126.8,413.0 126,404 C125.2,395.0 123.8,381.0 124,372 C124.2,363.0 126.5,356.3 127,350 C127.5,343.7 127.2,340.7 127,334 C126.8,327.3 126.5,319.0 126,310 C125.5,301.0 124.8,288.0 124,280 C123.2,272.0 121.7,265.3 121,262 C120.3,258.7 120.3,260.0 120,260 C119.7,260.0 119.7,258.7 119,262 C118.3,265.3 116.8,272.0 116,280 C115.2,288.0 114.5,301.0 114,310 C113.5,319.0 113.2,327.3 113,334 C112.8,340.7 112.5,343.7 113,350 C113.5,356.3 115.8,363.0 116,372 C116.2,381.0 114.8,395.0 114,404 C113.2,413.0 111.0,420.3 111,426 C111.0,431.7 113.8,434.8 114,438 C114.2,441.2 114.3,443.7 112,445 C109.7,446.3 103.7,446.2 100,446 C96.3,445.8 91.7,445.3 90,444 C88.3,442.7 89.2,440.3 90,438 C90.8,435.7 93.8,433.0 95,430 C96.2,427.0 97.8,427.0 97,420 C96.2,413.0 91.5,398.0 90,388 C88.5,378.0 88.0,368.7 88,360 C88.0,351.3 90.0,342.7 90,336 C90.0,329.3 89.7,327.7 88,320 C86.3,312.3 83.0,301.7 80,290 C77.0,278.3 71.0,260.0 70,250 C69.0,240.0 72.5,237.3 74,230 C75.5,222.7 78.0,213.3 79,206 C80.0,198.7 80.7,193.7 80,186 C79.3,178.3 75.7,167.7 75,160 C74.3,152.3 75.7,146.7 76,140 C76.3,133.3 77.7,120.3 77,120 C76.3,119.7 73.8,131.3 72,138 C70.2,144.7 67.7,153.0 66,160 C64.3,167.0 63.7,174.0 62,180 C60.3,186.0 58.3,189.0 56,196 C53.7,203.0 50.7,212.0 48,222 C45.3,232.0 41.5,247.0 40,256 C38.5,265.0 39.5,270.7 39,276 C38.5,281.3 38.0,284.8 37,288 C36.0,291.2 34.5,293.5 33,295 C31.5,296.5 29.7,297.2 28,297 C26.3,296.8 24.2,296.2 23,294 C21.8,291.8 21.5,287.5 21,284 C20.5,280.5 21.0,274.2 20,273 C19.0,271.8 16.0,277.5 15,277 C14.0,276.5 13.5,272.5 14,270 C14.5,267.5 16.5,264.3 18,262 C19.5,259.7 21.3,258.3 23,256 C24.7,253.7 26.5,253.3 28,248 C29.5,242.7 30.3,232.7 32,224 C33.7,215.3 36.3,204.3 38,196 C39.7,187.7 40.5,180.3 42,174 C43.5,167.7 45.0,164.7 47,158 C49.0,151.3 51.8,142.0 54,134 C56.2,126.0 58.3,116.3 60,110 C61.7,103.7 62.0,100.0 64,96 C66.0,92.0 68.7,88.3 72,86 C75.3,83.7 79.3,83.3 84,82 C88.7,80.7 95.5,79.7 100,78 C104.5,76.3 109.0,75.3 111,72 C113.0,68.7 109.2,60.3 112,58 C114.8,55.7 125.2,55.7 128,58Z" fill="url(#skin)" stroke="#8a7464" stroke-width="1.1"/><ellipse cx="120" cy="36" rx="18.5" ry="22.5" fill="url(#skin)" stroke="#8a7464" stroke-width="1"/><ellipse cx="101.5" cy="38" rx="3" ry="6" fill="#4a3b32" stroke="#8a7464" stroke-width=".7"/><ellipse cx="138.5" cy="38" rx="3" ry="6" fill="#4a3b32" stroke="#8a7464" stroke-width=".7"/><g><g fill="none" stroke="#7a675a" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M124,62 Q134,80 160,86"/>
+ <path d="M128,98 Q146,93 153,104 Q151,124 134,133 Q128,116 128,98Z"/>
+ <path d="M162,126 Q152,160 134,190"/>
+ <path d="M150,282 Q144,305 140,322 M128,282 Q132,305 132,322" stroke-width=".55"/>
+ <path d="M129,334 Q138,339 147,334"/>
+ <path d="M147,346 Q155,364 142,384 M129,346 Q122,364 133,384" stroke-width=".7"/>
+ <path d="M137,396 L136,422" stroke-width=".55"/>
+ <path d="M128,441 Q138,448 148,441"/>
+ <path d="M124,256 Q140,264 158,254"/>
+ <path d="M185,174 q3,5 8,2" stroke-width=".6"/>
+ <path d="M204,280 q2,-2 4,0 M208,281 q2,-2 4,0 M212,280 q2,-2 4,0 M216,278 q2,-2 4,0" stroke-width=".55"/>
+</g>
+<g fill="#6e5b4e"><ellipse cx="207" cy="294" rx="1.3" ry="1.8"/><ellipse cx="211.5" cy="296" rx="1.3" ry="1.8"/><ellipse cx="216" cy="293" rx="1.3" ry="1.8"/><ellipse cx="225" cy="275" rx="1.3" ry="1.8"/></g>
+<circle cx="127" cy="218" r="1.4" fill="#5a4337"/>
+<path d="M120,226 L165,226 L168,246 L160,252 L124,252 L120,250Z" fill="#1f2b3a" stroke="#3a4a5e" stroke-width=".8"/></g><g transform="translate(240,0) scale(-1,1)"><g fill="none" stroke="#7a675a" stroke-width=".8" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M124,62 Q134,80 160,86"/>
+ <path d="M128,98 Q146,93 153,104 Q151,124 134,133 Q128,116 128,98Z"/>
+ <path d="M162,126 Q152,160 134,190"/>
+ <path d="M150,282 Q144,305 140,322 M128,282 Q132,305 132,322" stroke-width=".55"/>
+ <path d="M129,334 Q138,339 147,334"/>
+ <path d="M147,346 Q155,364 142,384 M129,346 Q122,364 133,384" stroke-width=".7"/>
+ <path d="M137,396 L136,422" stroke-width=".55"/>
+ <path d="M128,441 Q138,448 148,441"/>
+ <path d="M124,256 Q140,264 158,254"/>
+ <path d="M185,174 q3,5 8,2" stroke-width=".6"/>
+ <path d="M204,280 q2,-2 4,0 M208,281 q2,-2 4,0 M212,280 q2,-2 4,0 M216,278 q2,-2 4,0" stroke-width=".55"/>
+</g>
+<g fill="#6e5b4e"><ellipse cx="207" cy="294" rx="1.3" ry="1.8"/><ellipse cx="211.5" cy="296" rx="1.3" ry="1.8"/><ellipse cx="216" cy="293" rx="1.3" ry="1.8"/><ellipse cx="225" cy="275" rx="1.3" ry="1.8"/></g>
+<circle cx="127" cy="218" r="1.4" fill="#5a4337"/>
+<path d="M120,226 L165,226 L168,246 L160,252 L124,252 L120,250Z" fill="#1f2b3a" stroke="#3a4a5e" stroke-width=".8"/></g><g fill="#7a675a"><circle cx="120" cy="70" r="1"/><circle cx="120" cy="78" r="1"/><circle cx="120" cy="86" r="1"/><circle cx="120" cy="94" r="1"/><circle cx="120" cy="102" r="1"/><circle cx="120" cy="110" r="1"/><circle cx="120" cy="118" r="1"/><circle cx="120" cy="126" r="1"/><circle cx="120" cy="134" r="1"/><circle cx="120" cy="142" r="1"/><circle cx="120" cy="150" r="1"/><circle cx="120" cy="158" r="1"/><circle cx="120" cy="166" r="1"/><circle cx="120" cy="174" r="1"/><circle cx="120" cy="182" r="1"/><circle cx="120" cy="190" r="1"/><circle cx="120" cy="198" r="1"/><circle cx="120" cy="206" r="1"/><circle cx="120" cy="214" r="1"/><circle cx="120" cy="222" r="1"/></g>
+<path d="M120,226 L120,250" fill="none" stroke="#3a4a5e" stroke-width=".8"/><path d="M98,227 h44" fill="none" stroke="#3a4a5e" stroke-width="1.6"/>
+<path d="M101.5,40 C98,14 110,13 120,13 C130,13 142,14 138.5,40 C137,52 132,56 120,56 C108,56 103,52 101.5,40Z" fill="#241c17"/>
+<path d="M112,58 Q120,61 128,58" fill="none" stroke="#7a675a" stroke-width=".7"/></symbol>
+<symbol id="sym-head" viewBox="0 0 240 260">
+    <path d="M106,188 C100,180 88,177 80,171 C74,166 72,160 72,152 L70,150 C72,146 74,145 75,144 L71,138 C72,134 74,132 74,130 L66,127 C60,125 60,120 62,116 L74,100 C74,96 73,92 74,88 C74,60 98,30 132,30 C168,30 190,58 188,96 C187,118 180,130 172,140 C170,170 172,196 178,208 C190,220 214,226 240,232 L240,262 L98,262 L102,232 C104,214 108,200 106,188Z" fill="url(#skin2)" stroke="#8a7464" stroke-width="1.3"/>
+    <path d="M78,62 C90,40 112,28 134,28 C166,28 190,52 188,92 C186,112 181,124 175,132 C172,116 168,104 164,96 C160,86 150,82 144,86 C138,78 134,72 130,66 C118,56 96,54 78,64Z" fill="#241c17"/>
+    <path d="M144,96 C150,86 164,88 165,104 C165,118 158,124 154,130 C150,136 142,134 142,126 C144,118 140,106 144,96Z" fill="#4a3b32" stroke="#8a7464" stroke-width="1.1"/>
+    <g fill="none" stroke="#7a675a" stroke-width="1" stroke-linecap="round">
+      <path d="M150,104 C154,100 158,104 156,112"/>
+      <path d="M76,168 C96,174 120,170 134,160 C138,150 138,130 136,118" stroke-dasharray="2 2"/>
+      <path d="M150,136 L112,232" stroke-dasharray="2 3"/>
+      <path d="M106,190 q-4,4 0,8"/>
+      <path d="M108,236 C140,231 180,236 214,239"/>
+      <path d="M70,122 q4,6 10,4"/>
+      <path d="M72,140 q4,2 8,1"/>
+    </g>
+    <path d="M82,100 Q90,95 98,100 Q90,103 82,100Z" fill="#e8ddd2"/><circle cx="86" cy="100" r="1.6" fill="#2a1f19"/>
+    <path d="M80,90 Q90,85 106,89" fill="none" stroke="#241c17" stroke-width="2.4" stroke-linecap="round"/>
+  </symbol>
+<symbol id="sym-sole" viewBox="0 0 120 220">
+    <path d="M58,14 C84,14 96,40 92,74 C88,104 80,124 80,150 C80,182 74,206 56,208 C36,210 30,186 32,156 C34,124 30,100 28,72 C26,36 36,14 58,14Z" fill="url(#skin2)" stroke="#8a7464" stroke-width="1.5"/>
+    <g fill="#4d3c31" stroke="#8a7464" stroke-width="1.2">
+      <ellipse cx="44" cy="14" rx="9" ry="10"/><ellipse cx="60" cy="9" rx="6" ry="7"/><ellipse cx="72" cy="12" rx="5.5" ry="6.5"/><ellipse cx="82" cy="18" rx="5" ry="6"/><ellipse cx="90" cy="27" rx="4.5" ry="5.5"/>
+    </g>
+    <path d="M36,74 L90,74" stroke="#7a675a" stroke-dasharray="2 3"/>
+    <text x="96" y="78" fill="#a39b92" font-size="7" font-family="Source Sans 3, sans-serif">1/3</text>
+    <text x="56" y="196" fill="#a39b92" font-size="7" text-anchor="middle" font-family="Source Sans 3, sans-serif">Ferse</text>
+  </symbol>
+</defs>
+</svg>
+<header class="top">
+  <div class="wrap brand">
+    <div>
+      <div class="bar"></div>
+      <h1>Kyusho-Jitsu</h1>
+      <div class="sub">Der Weg zum Meister · Lernatlas</div>
+    </div>
+    <div class="stat"><b id="statPts">95</b> Vitalpunkte · <b id="statKnown">0</b> sicher gelernt</div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Bereiche">
+  <div class="wrap">
+    <a href="#start">Start</a>
+    <a href="#grundlagen">Grundlagen</a>
+    <a href="#kuatsu">Kuatsu</a>
+    <a href="#punkte">Punkte-Atlas</a>
+    <a href="#lernkarten">Lernkarten</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#pruefung">Prüfungsprogramm</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- START -->
+<section class="view" id="v-start">
+  <div class="head">
+    <div class="eyebrow">Überblick</div>
+    <h2>Lernen in drei Schritten</h2>
+    <p class="prose">Lies zuerst die Grundlagen und Kuatsu. Schlag dann die Punkte deines Grades im Atlas nach, trainiere sie mit den Lernkarten und prüfe dich im Quiz. Dein Lernstand bleibt in diesem Browser gespeichert.</p>
+  </div>
+  <div class="grid g3">
+    <div class="panel"><h3>1 · Verstehen</h3><p class="muted small" style="margin-top:6px">5 Elemente, 12 Meridiane, 2 Gefäße, cun und Organuhr. Danach Kuatsu, denn Wiederherstellung kommt vor jedem Treffer.</p><p style="margin-top:12px"><a href="#grundlagen">Zu den Grundlagen</a></p></div>
+    <div class="panel"><h3>2 · Einprägen</h3><p class="muted small" style="margin-top:6px">Lernkarten mit Karteikasten-Prinzip. Was du weißt, rückt ein Fach weiter; was nicht, kommt wieder dran.</p><p style="margin-top:12px"><a href="#lernkarten">Zu den Lernkarten</a></p></div>
+    <div class="panel"><h3>3 · Prüfen</h3><p class="muted small" style="margin-top:6px">Zehn gemischte Fragen: Lage, Wirkung, Reaktivierung, markierte Punkte im Bild und Theorie.</p><p style="margin-top:12px"><a href="#quiz">Zum Quiz</a></p></div>
+  </div>
+
+  <div class="head"><div class="eyebrow">Sicherheit zuerst</div><h2>Grundregeln des Trainings</h2></div>
+  <div class="grid g2">
+    <div class="panel rule"><span class="n">1</span><h3>Höchstens einmal pro Woche trainieren</h3><p>Präzisionsarbeit braucht Regeneration. So lernt der Körper die Techniken ohne Überlastung oder Verletzung.</p></div>
+    <div class="panel rule"><span class="n">2</span><h3>Aktivierte Punkte immer wiederherstellen</h3><p>Jede Manipulation wird zurückgesetzt, damit der Partner nach dem Training keine Symptome behält.</p></div>
+    <div class="panel rule"><span class="n">3</span><h3>Immer auf der herzfernen Seite trainieren</h3><p>Dort ist die Wirkung schwächer. Das senkt das Risiko ernsthafter Verletzungen.</p></div>
+    <div class="panel rule"><span class="n">4</span><h3>Nie mehr Kraft als ein 7-jähriges Kind</h3><p>Kyusho lebt von Wissen, Präzision und Technik, nicht von roher Gewalt.</p></div>
+  </div>
+
+  <div class="head"><div class="eyebrow">Der Weg</div><h2>Gürtel und Meridiane</h2><p class="muted">Jeder Kyu-Grad nimmt ein Meridianpaar dazu. Klick auf einen Grad öffnet sein Prüfungsprogramm.</p></div>
+  <div class="ladder" id="ladder"></div>
+</section>
+
+<!-- GRUNDLAGEN -->
+<section class="view" id="v-grundlagen">
+  <div class="head">
+    <div class="eyebrow">Theorie · 9. Kyu</div>
+    <h2>Die 5 Elemente</h2>
+    <p class="prose">Die Fünf-Elemente-Lehre der TCM ordnet allen Dingen eines von fünf Grundelementen zu. Jedes Element hat Organe, Emotionen, Körperstrukturen und eine Jahreszeit. Stehen sie im Gleichgewicht, ist der Körper gesund; Störungen erzeugen Disharmonie. Dieses Wissen nutzt Kyusho auf vielerlei Weise.</p>
+  </div>
+  <div class="grid g5" id="elements"></div>
+
+  <div class="head"><div class="eyebrow">Eselsbrücke</div><h2>Yin oder Yang?</h2></div>
+  <div class="callout">Alle Meridiane mit einem <b>„a“</b> im Namen sind <b>Yang</b>: Dickd<b>a</b>rm, M<b>a</b>gen, Dünnd<b>a</b>rm, Bl<b>a</b>se, G<b>a</b>llenbl<b>a</b>se, Dreif<b>a</b>cher Erwärmer. Ohne „a“ ist es <b>Yin</b>: Lunge, Milz, Herz, Niere, Herzbeutel, Leber.</div>
+
+  <div class="head"><div class="eyebrow">Energiebahnen</div><h2>Die 12 Meridiane und die Organuhr</h2><p class="prose">Durch die Meridiane fließt die Lebensenergie Qi. Jeder Meridian gehört zu einem Organ oder Organsystem. Die Reihenfolge folgt dem Qi-Fluss durch den Tag.</p></div>
+  <div class="clockwrap">
+    <svg id="clock" viewBox="0 0 320 320" role="img" aria-label="Organuhr: welcher Meridian zu welcher Tageszeit am stärksten ist"></svg>
+    <div class="prose small">
+      <p>Jeder Meridian hat zwei Stunden <b style="color:var(--accent)">Maximalzeit</b>. Der Tag beginnt um 03 Uhr mit der Lunge und endet um 03 Uhr mit der Leber. Konzeptions- und Lenkergefäß sind <b>immer</b> aktiv.</p>
+      <p class="muted">Zeiten und Punktzahlen laut Kyusho-Tafel des DKV und Lehrtafel Körperakupunktur.</p>
+      <p>Fahre mit der Maus über ein Segment oder tippe darauf, um den Meridian in der Tabelle hervorzuheben.</p>
+    </div>
+  </div>
+  <div class="tbl"><table id="merTable">
+    <thead><tr><th>Kürzel</th><th>Meridian</th><th>Verlauf</th><th>Funktion in der TCM</th><th>Element</th><th>Yin/Yang</th><th>Maximalzeit</th><th>Punkte</th><th>Grad</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="small muted">Dazu die zwei Gefäße: Konzeptionsgefäß (Yin, 24 Punkte) und Lenkergefäß (Yang, 28 Punkte).</p>
+
+  <div class="head"><div class="eyebrow">Theorie · ab 8. Kyu</div><h2>Die 3 Zyklen der Elemente</h2>
+    <div class="prose"><p>Die Elemente wirken in festen Kreisläufen aufeinander. Im Kyusho zählt vor allem, welches Element ein anderes <b>zerstört</b>. So lassen sich Angriffe auf Meridiane wählen, deren Element die Energie des Gegners bricht.</p></div></div>
+  <div class="clockwrap">
+    <svg id="cycles" viewBox="0 0 300 300" role="img" aria-label="Fünf-Elemente-Zyklen"></svg>
+    <div style="display:grid;gap:14px">
+      <div class="chips" id="cycBtns" role="group" aria-label="Zyklus wählen">
+        <button type="button" class="chip" data-c="sheng" aria-pressed="true">Erzeugung</button>
+        <button type="button" class="chip" data-c="ke" aria-pressed="false">Zerstörung</button>
+        <button type="button" class="chip" data-c="wu" aria-pressed="false">Schwächung</button>
+      </div>
+      <div class="prose small" id="cycText"></div>
+      <div class="tbl"><table id="cycTable"><thead><tr><th>Element</th><th>erzeugt</th><th>zerstört</th><th>schwächt</th></tr></thead><tbody></tbody></table></div>
+      <p class="small muted">Die Zerstörung steht so auf der Kyusho-Tafel des DKV. Erzeugung und Schwächung sind die klassischen TCM-Kreisläufe; dass diese drei die „3 Zyklen“ der Prüfung sind, ist naheliegend (die Dan-Prüfung nennt „Zerstörung/Schwächung“), steht aber nicht ausdrücklich im Skript. Frag im Zweifel deinen Trainer.</p>
+    </div>
+  </div>
+
+  <div class="head"><div class="eyebrow">Praxis · Kata und Prüfung ab Dan</div><h2>Stände, Richtungstöne und Meridiantöne</h2>
+    <div class="prose"><p>Jedem Element ist ein Stand, ein Richtungston und ein Meridianton zugeordnet. Für die Dan-Prüfung sind Stände und Töne Pflicht („Komplex: Stände, Töne, Go-Ju“), und die Kata der Richtungen übt sie.</p></div></div>
+  <div class="tbl"><table id="toneTable"><thead><tr><th>Element</th><th>Meridiane</th><th>Stand (Dachi)</th><th>Richtungston</th><th>Meridianton</th><th>Finger</th></tr></thead><tbody></tbody></table></div>
+  <div class="grid g2">
+    <div class="panel"><h3>Elemente an der Hand</h3><p class="small muted" style="margin:4px 0 10px">Laut Kyusho-Tafel, Handfläche nach vorn</p><svg id="hand" viewBox="0 0 300 230" style="width:100%;max-width:380px" role="img" aria-label="Fingerzuordnung der Elemente"></svg></div>
+    <div class="panel"><h3>Merkhilfe</h3><ul class="small" style="margin:10px 0 0;padding-left:1.1rem;display:grid;gap:8px">
+      <li>Richtungstöne sind die Vokale: <b>I</b> innen, <b>O</b> vorne, <b>Ü</b> hinten, <b>A</b> oben, <b>U</b> unten, <b>E</b> außen.</li>
+      <li>Herzbeutel und Dreifacher Erwärmer gehören zu Feuer. Auf der Tafel steht für sie kein eigener Stand.</li>
+      <li>Auf der Tafel sind die Paare jeweils mit dem Paar zwei Zeilen tiefer verklammert (Lunge mit Magen, Dickdarm mit Milz usw.). Was diese Klammer bedeutet, sagt die Tafel nicht; frag am besten deinen Trainer.</li>
+    </ul></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Die 2 Gefäße</h3>
+      <div class="prose small" style="margin-top:10px">
+        <p><b>Konzeptionsgefäß (KG)</b>, oft „Geburtskanal“ genannt: reguliert den Fluss von Yin und Blut, eng mit dem weiblichen Fortpflanzungssystem verbunden und wichtig für die Versorgung des Fötus.</p>
+        <p><b>Lenkergefäß (LG)</b>, der „Regulator des Yang“: steuert den Yang-Fluss, ist eng mit dem Nervensystem verbunden und wirkt auf Körperfunktionen, mentale Klarheit, Haltung, Gleichgewicht und Bewegung.</p>
+        <p class="muted">Beide sind außerordentliche Meridiane. Prüfungsrelevant ab dem 2. Kyu (LG 20, 26, 27 · KG 3, 4, 5, 12, 14, 17, 24).</p>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Maßeinheit cun</h3>
+      <div class="prose small" style="margin-top:10px">
+        <p>Das <b>cun</b> (auch „Chun“) ist eine traditionelle chinesische Längeneinheit, mit der man Akupunkturpunkte am eigenen Körper des Partners vermisst.</p>
+        <p><b>1 cun</b> ≈ Abstand zwischen erstem und zweitem Glied des Zeigefingers <b>oder</b> Daumenbreite der Person, an der gemessen wird. Die Akupunktur-Lehrtafel nennt es auch <b>Proportionalzoll (PZ)</b>.</p>
+      </div>
+      <svg viewBox="0 0 300 90" style="width:100%;max-width:340px;margin-top:14px" aria-label="Schema: ein cun entspricht der Daumenbreite">
+        <rect x="20" y="20" width="56" height="60" rx="22" fill="none" stroke="#a39b92" stroke-width="2"/>
+        <line x1="20" y1="12" x2="76" y2="12" stroke="#ed7d31" stroke-width="2"/>
+        <line x1="20" y1="6" x2="20" y2="18" stroke="#ed7d31" stroke-width="2"/><line x1="76" y1="6" x2="76" y2="18" stroke="#ed7d31" stroke-width="2"/>
+        <text x="48" y="54" fill="#f1ece6" font-size="13" text-anchor="middle" font-family="Jost">1 cun</text>
+        <text x="100" y="40" fill="#a39b92" font-size="12" font-family="Source Sans 3">Daumenbreite</text>
+        <text x="100" y="58" fill="#a39b92" font-size="12" font-family="Source Sans 3">1,5 cun ≈ Zeige- + Mittelfinger</text>
+        <text x="100" y="76" fill="#a39b92" font-size="12" font-family="Source Sans 3">3 cun ≈ 4 Finger nebeneinander</text>
+      </svg>
+      <div class="tbl" style="margin-top:12px"><table><thead><tr><th>Strecke</th><th>cun</th></tr></thead><tbody>
+        <tr><td>Augenbraue bis vorderer Haaransatz</td><td class="tnum">3</td></tr>
+        <tr><td>Vorderer bis hinterer Haaransatz</td><td class="tnum">12</td></tr>
+        <tr><td>Achselfalte bis Ellenbogenfalte</td><td class="tnum">9</td></tr>
+        <tr><td>Ellenbogenfalte bis Handgelenksfalte</td><td class="tnum">12</td></tr>
+        <tr><td>Hüfte (Trochanter) bis Kniemitte, außen</td><td class="tnum">19</td></tr>
+        <tr><td>Kniemitte bis Außenknöchel</td><td class="tnum">16</td></tr>
+        <tr><td>Knie innen bis Innenknöchel</td><td class="tnum">13</td></tr>
+      </tbody></table></div>
+      <p class="muted small" style="margin-top:6px">Fingerregeln und Strecken nach der Lehrtafel Körperakupunktur.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KUATSU -->
+<section class="view" id="v-kuatsu">
+  <div class="head">
+    <div class="eyebrow">Wiederherstellung</div>
+    <h2>Kuatsu: die Kunst der Wiederherstellung</h2>
+    <p class="prose">Kuatsu ist das Gegenstück zu Kyusho: Statt Energiefluss zu stören, stellt es ihn wieder her. Deshalb steht es vor allem anderen. Wer trainiert, will den Partner nicht schädigen, und wenn doch etwas schiefgeht, muss die Wiederherstellung sitzen, auch unter Stress. Die herzstimulierenden Techniken des Shinzo-Kuatsu ähneln der westlichen Herzdruckmassage.</p>
+  </div>
+  <div class="callout"><b>Merksatz:</b> Nichts zu unternehmen ist die schlechteste aller möglichen Varianten.</div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <h3>Einzelpunkt-Wiederherstellung</h3>
+      <p class="muted small" style="margin:6px 0 10px">Ein angeschlagener Punkt wird gezielt behandelt. Am wirksamsten, wenn der Verursacher selbst wiederherstellt.</p>
+      <ol class="steps small">
+        <li>Kontakt zum Partner immer mit <b>beiden Händen</b>.</li>
+        <li><b>Dreimal</b> auf den Punkt klopfen.</li>
+        <li>Variante A: flache Hand <b>im Uhrzeigersinn</b> kreisen. Variante B: Meridian <b>in Flussrichtung</b> ausstreichen.</li>
+        <li>Negative Energie bzw. Energieüberschuss abschütteln und „entsorgen“.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Neurologische Wiederherstellung</h3>
+      <p class="small" style="margin-top:6px">Gleicht den Energiefluss zwischen lebenswichtigen Punkten aus, typischerweise nach <b>Treffern im Kopfbereich</b>.</p>
+      <p class="small" style="margin-top:8px">Symptome reichen von leichter Desorientierung bis Bewusstlosigkeit; die Vorstellung: Energie wurde aus dem Kopf abgezogen.</p>
+      <p class="small muted" style="margin-top:8px">Im Atlas „sofort“ gefordert bei: <span id="neuroList"></span>.</p>
+    </div>
+    <div class="panel">
+      <h3>Lungen-Reanimation</h3>
+      <p class="small" style="margin-top:6px">Nach einem Lungenschock arbeitet die Lunge nicht mehr selbstständig. Schlüssel ist das <b>Zwerchfell</b> (Muskel-Sehnen-Platte):</p>
+      <ul class="small" style="margin:8px 0 0;padding-left:1.1rem">
+        <li>Einatmen = Zwerchfell <b>kontrahiert</b>, Lunge dehnt sich.</li>
+        <li>Ausatmen = Zwerchfell <b>entspannt</b>.</li>
+      </ul>
+      <p class="small muted" style="margin-top:8px">Das Buch zeigt drei Varianten per Video. Weitere Kapitel: Herz-, Kehlkopf-Reanimation, Hoden-Wiederherstellung.</p>
+    </div>
+  </div>
+
+  <div class="head"><div class="eyebrow">Westlicher Standard</div><h2>Herz-Lungen-Wiederbelebung für Ersthelfer</h2><p class="prose">Wenn ein Notfall nicht klar auf einen energetischen Angriff zurückgeht oder die Ursache unbekannt ist, gilt die westliche Erste Hilfe. Das Skript bezieht sich auf die ERC-Leitlinien von 2015; prüfe beim nächsten Erste-Hilfe-Kurs den aktuellen Stand.</p></div>
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Ablauf</h3>
+      <ol class="steps" style="margin-top:12px">
+        <li>Bewusstlos, nicht ansprechbar, keine normale Atmung → <b>Herz-Kreislauf-Stillstand annehmen</b>. Atmung prüfen mit der Hand seitlich am Brustkorb; Pulskontrolle durch Laien kann entfallen.</li>
+        <li><b>Notruf absetzen.</b> Wenn möglich einen Helfer als Einweiser für den Rettungsdienst schicken.</li>
+        <li><b>Herzdruckmassage:</b> <span class="tnum">100–120</span> Kompressionen pro Minute, etwa <span class="tnum">5 cm</span> tief, bis der Rettungsdienst übernimmt.</li>
+        <li>Wenn möglich <b>30 : 2</b>: nach 30 Kompressionen 2 Atemspenden. Unsicher? Dann nur drücken.</li>
+        <li><b>AED</b> holen lassen und einsetzen, sobald verfügbar. Er sagt per Sprachausgabe, was zu tun ist.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Worauf es ankommt</h3>
+      <ul class="small" style="margin:12px 0 0;padding-left:1.1rem;display:grid;gap:8px">
+        <li>Nach dem Notruf hat die Herzdruckmassage <b>absolute Priorität</b>. Unterbrechungen höchstens <b>10 Sekunden</b>.</li>
+        <li>AEDs hängen zunehmend in Turnhallen und Sportstätten. Ein zweiter Helfer holt und bereitet das Gerät vor.</li>
+        <li><b>Allein vor Ort:</b> aufs Wesentliche konzentrieren, Maßnahmen nacheinander.</li>
+        <li><b>Viele Helfer im Training:</b> einer übernimmt die Führung und verteilt die Aufgaben, sonst entsteht Chaos.</li>
+        <li>Diese Grundgedanken gelten für energetische Wiederherstellung und HLW gleichermaßen.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PUNKTE -->
+<section class="view" id="v-punkte">
+  <div class="head">
+    <div class="eyebrow">Nachschlagen</div>
+    <h2>Punkte-Atlas</h2>
+    <p class="muted">Lage, Schlagrichtung, Aktivierung, Wirkung und Reaktivierung jedes Punktes aus dem Skript. Jeder Punkt hat eine Animation: Der Meridian zeichnet sich in Fließrichtung, dann zoomt die Skizze auf den Punkt.</p>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="controls">
+      <label class="lbl" for="q">Suche</label>
+      <input type="search" id="q" placeholder="z. B. Bewusstlosigkeit, Handgelenk, Gb 20 …">
+    </div>
+    <div class="chips" id="atlasChips" role="group" aria-label="Meridiane filtern"></div>
+  </div>
+  <p class="muted small" id="atlasCount"></p>
+  <div class="pcards" id="atlas"></div>
+</section>
+
+<!-- LERNKARTEN -->
+<section class="view" id="v-lernkarten">
+  <div class="head">
+    <div class="eyebrow">Karteikasten</div>
+    <h2>Lernkarten</h2>
+    <p class="muted">Wähle Meridiane und was du abfragen willst. Neue und falsch beantwortete Karten kommen öfter dran.</p>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="chips" id="fcChips" role="group" aria-label="Meridiane für Lernkarten"></div>
+    <div class="controls">
+      <label class="lbl" for="fcMode">Abfrage</label>
+      <select id="fcMode">
+        <option value="lok">Punkt → Lage</option>
+        <option value="wi">Punkt → Wirkung</option>
+        <option value="re">Punkt → Reaktivierung</option>
+        <option value="all">Punkt → alles</option>
+        <option value="rev">Lage → welcher Punkt?</option>
+      </select>
+      <button class="btn ghost" id="fcReset" type="button">Lernstand dieser Auswahl zurücksetzen</button>
+    </div>
+  </div>
+  <div class="fc-area">
+    <div class="card" id="fcCard">
+      <div class="cq"><div class="ask" id="fcAsk"></div><div class="big" id="fcFront"></div><div class="muted small" id="fcSub"></div></div>
+      <div class="ca hidden" id="fcBack"></div>
+      <div class="cf">
+        <button class="btn blue" id="fcFlip" type="button">Aufdecken <span class="kbd">Leertaste</span></button>
+        <div class="fcgrade">
+          <button class="btn bad" id="fcNo" type="button" disabled>Nochmal</button>
+          <button class="btn ok" id="fcYes" type="button" disabled>Gewusst</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Dein Karteikasten</h3>
+      <p class="muted small" style="margin:4px 0 12px">Fach 4 = sicher gelernt</p>
+      <div class="boxes" id="fcBoxes"></div>
+      <p class="small muted" style="margin-top:14px">Tastatur: Leertaste deckt auf, <b>J</b> = gewusst, <b>N</b> = nochmal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="view" id="v-quiz">
+  <div class="head">
+    <div class="eyebrow">Selbsttest</div>
+    <h2>Quiz</h2>
+    <p class="muted">Zehn Fragen aus den gewählten Meridianen und der Theorie. Bei Bildfragen musst du den markierten Punkt erkennen.</p>
+  </div>
+  <div class="panel" style="display:grid;gap:12px">
+    <div class="chips" id="qzChips" role="group" aria-label="Meridiane für das Quiz"></div>
+    <div class="controls"><button class="btn" id="qzStart" type="button">Neue Runde starten</button><span class="muted small" id="qzBest"></span></div>
+  </div>
+  <div id="qz"></div>
+</section>
+
+<!-- PRÜFUNG -->
+<section class="view" id="v-pruefung">
+  <div class="head">
+    <div class="eyebrow">Prüfungsprogramm</div>
+    <h2 id="exTitle">Prüfungsprogramm</h2>
+    <p class="muted">Pflichtteil: Kata/Kihon und Theorie. Wahlteil: Bunkai und Selbstverteidigung. Alle Techniken 1–2 × langsam und schnell; Abwehr und Gegenangriff sind frei wählbar.</p>
+  </div>
+  <div class="exam-sel" id="exSel" role="group" aria-label="Grad wählen"></div>
+  <p class="legend"><i></i>Neu in diesem Grad</p>
+  <div class="exam4" id="exBody"></div>
+</section>
+
+</main>
+<footer>
+  <div class="wrap">Inhalte aus dem Skript „Kyusho-Jitsu – Der Weg zum Meister“, den Präsentationen Lunge und Dickdarm, der Kyusho-Jitsu-Tafel des DKV und der Lehrtafel Körperakupunktur. Ersetzt keinen Unterricht bei einem erfahrenen Meister und keinen Erste-Hilfe-Kurs.</div>
+</footer>
+
+<script>
+const POINTS = [{"id":"Lu 1","m":"Lu","n":1,"lok":"2 cun unter Schlüsselbein, 6 cun von Körpermitte entfernt","ri":"45° nach unten oder oben","akt":"Schlag- und Druckpunkt","wi":"Große Qi- Ableitung, starker örtlicher Schmerz","re":"Auf der gegenüberliegenden Seite Lu 1 durch Druck behandeln"},{"id":"Lu 5","m":"Lu","n":5,"lok":"In Ellenbogen auf Daumenseite","ri":"Nach innen und ca. 30° Richtung Daumen","akt":"Schlag- und Druckpunkt","wi":"Bewusstlosigkeit und Gehirnschädigung","re":"Lu 5 auf der gegenüberliegenden Seite mit Einzelpunkt Wiederherstellung"},{"id":"Lu 8","m":"Lu","n":8,"lok":"1 cun oberhalb der Handgelenksfalte","ri":"Nach innen und Richtung Daumen","akt":"Schlag- , Druck- und Reibepunkt","wi":"Örtlicher Schmerz","re":"Druck auf Lu 8 auf der gegenüberliegenden Seite oder Lu 3"},{"id":"Lu 9","m":"Lu","n":9,"lok":"In Handgelenksfalte","ri":"Direkt 90°","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Atemprobleme","re":"Druck auf Lu 9 der gegenüberliegenden Seite"},{"id":"Lu 10","m":"Lu","n":10,"lok":"Mitte auf Daumenballen, höchster Punkt am Daumen","ri":"90° nach innen und 45° Richtung Daumenknochen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz","re":"Druck auf Lu 11"},{"id":"Di 4","m":"Di","n":4,"lok":"Am Ansatz zwischen Daumen und Zeigefinger","ri":"Nach innen Richtung Mittelhandknochen, Zeigefinger und Daumen","akt":"Schlag- und Druckpunkt","wi":"Schmerz im gesamtem Unterarm oder Desorientierung","re":"Massage von Di 4 auf der gegenüberliegenden Seite"},{"id":"Di 5","m":"Di","n":5,"lok":"In Handgelenksfalte","ri":"Schlag Richtung Handgelenk oder 90°","akt":"Schlagpunkt","wi":"Örtlicher Schmerz und/oder Handgelenksbruch","re":"Shiatsu- Druckmassage; bei Bruch zum Arzt"},{"id":"Di 10","m":"Di","n":10,"lok":"2 Cun unter dem Ellebogengelenk","ri":"Gerade nach innen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Lähmung der Hand, Bewusstlosigkeit","re":"Beide Handballen auf die geschädigte Stelle am Unterarm legen und mittels Zusammendrücken der Finger den geschädigten Unterarm massieren"},{"id":"Di 13","m":"Di","n":13,"lok":"3 cun oberhalb des Ellebogens an der Oberarmaußenseite","ri":"Direkt 90°","akt":"Schlag- und Druckpunkt","wi":"Schmerz im gesamten Arm","re":"Schlag mit flacher Hand auf äußeren Oberarm, dann kreisförmig reiben"},{"id":"Di 17","m":"Di","n":17,"lok":"Am Kopfwendemuskel hinten, unter Höhe des Kehlkopfes, 1 cun unter Di 18","ri":"45° einwärts Richtung Halsbasis","akt":"Schlagpunkt","wi":"Blockiert Qi- und Blutzufuhr zum Gehirn; Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"Di 18","m":"Di","n":18,"lok":"Am Kopfwendemuskel vorne, über Kehlkopf","ri":"45° einwärts Richtung Halsbasis","akt":"Schlag- und Druckpunkt","wi":"Blockiert Qi- und Blutzufuhr zum Gehirn; Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"Di 20","m":"Di","n":20,"lok":"Vertiefung seitlich vom Nasenflügel","ri":"45° nach oben zur Kopfmitte oder 45° zum Jochbein","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Druck auf Dickdarm 20 auf der gegenüberliegenden Seite"},{"id":"Ma 2","m":"Ma","n":2,"lok":"2 cun unter der Mitte des Auges","ri":"Gerade nach innen","akt":"Schlag- und Druckpunkt","wi":"Schwächegefühl, starker Schmerz, Bewusstlosigkeit","re":"Unterarmseite Richtung Ellenbogen reiben"},{"id":"Ma 3","m":"Ma","n":3,"lok":"1 cun neben Nasenflügel","ri":"90° nach innen oder oben","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Übelkeit","re":"Unterarmseite Richtung Ellenbogen reiben"},{"id":"Ma 5","m":"Ma","n":5,"lok":"In der Mitte des seitlichen Unterkiefers","ri":"45° nach oben oder unten nach innen","akt":"Schlag- und Druckpunkt","wi":"Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"Ma 6","m":"Ma","n":6,"lok":"Am Ende des seitlichen Unterkiefers","ri":"45° nach innen zur Nasenspitze","akt":"Schlag- und Druckpunkt","wi":"Übelkeit, Bewusstlosigkeit, Gerhirnerschütterung","re":"Gb 20 auswärts drücken oder Ma 11"},{"id":"Ma 7","m":"Ma","n":7,"lok":"Zwischen Ober- und Unterkiefer in der Vertiefung vor dem Ohr","ri":"Direkt 90° nach innen und oben","akt":"Schlag-, Druck- und Reibepunkt","wi":"Kontrolliertest der Beine, Bewusstloigkeit","re":"Mit zunehmenden Druck Di 10 stimulieren"},{"id":"Ma 9","m":"Ma","n":9,"lok":"Auf des Höhe der Kehlkopfspitze","ri":"45° nach innen oben oder 45° innen unten","akt":"Schlag- und Druckpunkt","wi":"Bewusstlosigkeit, starke Blutdrucksveränderung","re":"Druck auf Gb 20 bzw. neurologische Widerherstellung"},{"id":"Ma 11","m":"Ma","n":11,"lok":"Senkrecht unter Ma 9, am oberen Rand des Schlüsselbeins","ri":"45 nach oben und nach inneren","akt":"Schlag- und Druckpunkt","wi":"Beine werden instabil, unter Umständen Herzstillstand","re":"Druck auf Ma 11 im Winkel von 45° nach unten; bei Herzstillstand sofort wiederbeleben."},{"id":"Ma 12","m":"Ma","n":12,"lok":"Oberhalb des Schlüsselbeins senkrecht über Brustwarze (4 cun seitlich der vorderen Mittellinie)","ri":"45° von oben und nach innen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz Und kontrolliertest der Beine","re":"Bei Qi-Schaden Akupunktur aufsuchen"},{"id":"Ma 15","m":"Ma","n":15,"lok":"In der Mitte von Schlüsselbein und Brustwarze","ri":"45° nach innen und unten","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Herzstillstand","re":"Sofort wiederbeleben"},{"id":"Ma 18","m":"Ma","n":18,"lok":"2 cun unterhalb der Brustwarze","ri":"45° in den Körper","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Übelkeit, Kopfschmerzen, bei Angriffen auf linke Seite, Herzstillstand","re":"Auf Unterarminnenseite Richtung Handgelenk reiben, bei Herzstillstand sofort reanimieren"},{"id":"Ma 25","m":"Ma","n":25,"lok":"2 cun neben Bauchnabel","ri":"90° oder 45° von oben nach unten","akt":"Schlagpunkt","wi":"Örtlicher Schmerz bis hin zur Bewusstlosigkeit oder Darmentleerung","re":"Unterarmaußenseite Richtung Handgelenk reiben und Stimulieren des Di 10"},{"id":"Ma 34","m":"Ma","n":34,"lok":"2 cun über oberer seitlicher Ecke der Kniescheibe","ri":"45° nach innen und unten","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, sofort Kontrollverlust des Beins","re":"Druck und Massage des Ma 34 auf der gegenüberliegenden Seite"},{"id":"Ma 36","m":"Ma","n":36,"lok":"3 cun unter der Kniescheibe in Vertiefung neben dem Schienbein","ri":"45° Richtung Knie oder nach unten","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, evtl. Schaden an der Milz","re":"Stimulierung von Ma 36 und Ma 30 auf der gegenüberliegenden Seite mittels Fingerdruck"},{"id":"Mi 6","m":"Mi","n":6,"lok":"3 cun über Knöchel, Unterschenkel-innenseite (am Hinterrand des Schienbeins)","ri":"45° nach innen und untern oder oben","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Übelkeit, Erbrechen, Qi-Ableitung aktiviert Kopf- und Körperpunkte und schwächt Bein","re":"Ab Mi 6 ca. 6 cun aufwärts mit leichtem Druck reiben"},{"id":"Mi 9","m":"Mi","n":9,"lok":"2 cun unter Knieinnenseite","ri":"45° nach innen und oben","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Übelkeit","re":"Unterarminnenseite aufwärts bis Ellenbogen reiben"},{"id":"Mi 10","m":"Mi","n":10,"lok":"2 cun oberhalb der Kniescheibe innen","ri":"45° nach innen und unten","akt":"Schlag- und Druckpunkt","wi":"Gehirn verliert Steuerung über Körper, Schock, Bewusstlosigkeit","re":"Druck auf Mi 10 auf der gegenüberliegenden Seite"},{"id":"Mi 11","m":"Mi","n":11,"lok":"Innenseite des Oberschenkels, Mitte zwischen Knie und Hüfte","ri":"45° nach innen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Qi-Ableitung, Schwächegefühl","re":"Sanfter Druck auf KG 20 Richtung Kopfzentrum"},{"id":"Mi 17","m":"Mi","n":17,"lok":"Unterhalb der Brustmuskulatur (siehe Ma 18), 6 cun neben der Körpermitte","ri":"45° Richtung Körper (Herz)","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit, Herzstillstand","re":"Massieren von Mi 17 auf der gegenüberliegenden Seite, und die Innenseite des Oberarms in Richtung Ellenbogen reiben; bei Bewusstlosigkeit sofort neurologische Wiederherstellung; Bei Herzstillstand sofort reanimieren"},{"id":"Mi 21","m":"Mi","n":21,"lok":"In der Mitte der Seite des Oberkörpers, unterhalb der sechsten Rippe","ri":"Von der Seite direkt 90° in den Oberkörper","akt":"Schlagpunkt","wi":"Energetischer und physikscher Schaden der Leber und Lunge","re":"Druck auf Gb 20 aufwärts und Massieren des Bereichs Mi 20 bis Mi 21"},{"id":"He 1","m":"He","n":1,"lok":"In der Achselhöhle","ri":"90° zum Körper oder 45° nach unten","akt":"Schlag- und Druckpunkt","wi":"Schaden an Achselarterie, Störung der Gehirnfunktion, Herzstillstand","re":"Sofort reanimieren und Notarztverständigen, ansonsten gibt es kein Gegenmittel"},{"id":"He 2","m":"He","n":2,"lok":"3 cun über Ellenbogenfalte","ri":"Direkt 90° nach innen zum Knochen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Unwohlsein, Bewusstlosigkeit","re":"An kleinem Finger He 9 drücken"},{"id":"He 3","m":"He","n":3,"lok":"In der Ellenbogenfalte der Innenseite","ri":"Auf Innenseite des Ellenbogens Richtung Gelenk","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Schwächegefühl, evtl. Herzstillstand","re":"Druck auf He 3 auf der gegenüberliegenden Seite oder He 9 auf geschädigter Seite"},{"id":"He 4","m":"He","n":4,"lok":"","ri":"45° nach innen und untern oder oben","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Übelkeit, Erbrechen, Qi-Ableitung aktiviert Kopf- und Körperpunkte und schwächt Bein","re":"Ab Mi 6 ca. 6 cun aufwärts mit leichtem Druck reiben"},{"id":"He 5","m":"He","n":5,"lok":"1 cun über Handgelenksfalte","ri":"45° Richtung Handgelenk","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"He 6 drücken oder He 3 und He 5 reiben"},{"id":"He 6","m":"He","n":6,"lok":"0,5 cun über Handgelenksfalte","ri":"45° nach innen","akt":"Schlag- und Druckpunkt","wi":"Schwächung des Herzens, Bewusstseinsstörung","re":"Druck auf He 6 auf der gegenüberliegenden Seite"},{"id":"He 8","m":"He","n":8,"lok":"Stelle, an der beim Ballen der Faust der kleinen Finger die Hand berührt","ri":"Nach innen zum Knochen des kleinen Fingers","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, Herzschädigung","re":"Druck auf He 8 auf der gegenüberliegenden Seite"},{"id":"Dü 6","m":"Dü","n":6,"lok":"1,5 cun von Handgelenksfalte, in der Vertiefung neben dem Knöchel","ri":"45° Richtung Hand","akt":"Schlag-, Druck-, Reibepunkt","wi":"Örtlicher Schmerz, Spannung aller Sehnen im gesamten Körper, vorläufige Blindheit","re":"Druck auf He 6 auf der gegenüberliegenden Seite"},{"id":"Dü 16","m":"Dü","n":16,"lok":"Am hinteren Rand des Handwendemuskels","ri":"Seitlich des Kehlkopfs 90° auf Hals","akt":"Schlag- und Druckpunkt","wi":"Benommenheit, unkontrolliertes Lachen durch Beeinflussung der Emotionen","re":"Sofort neurologische Wiederbelebung"},{"id":"Dü 17","m":"Dü","n":17,"lok":"Am vorderen Rand des Halswendemuskels in Höhe Unterkante des Kieferknochens","ri":"45° nach oben oder nach innen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Spannung aller Sehnen im gesamten Körper, vorläufige Blindheit","re":"Druck auf He 6 auf der gegenüberliegenden Seite"},{"id":"Dü 18","m":"Dü","n":18,"lok":"","ri":"45° Richtung Hand","akt":"Schlag-, Druck-, Reibepunkt","wi":"Örtlicher Schmerz, Spannung aller Sehnen im gesamten Körper, vorläufige Blindheit","re":"Druck auf He 6 auf der gegenüberliegenden Seite"},{"id":"Dü 19","m":"Dü","n":19,"lok":"","ri":"45° Richtung Hand","akt":"Schlag-, Druck-, Reibepunkt","wi":"Örtlicher Schmerz, Spannung aller Sehnen im gesamten Körper, vorläufige Blindheit","re":"Druck auf He 6 auf der gegenüberliegenden Seite"},{"id":"Bl 2","m":"Bl","n":2,"lok":"Am Ansatz der Augenbraue (innen)","ri":"45° nach oben","akt":"Schlag- und Druckpunkt","wi":"Kopfschmerzen, Übelkeit, Bewusstlosigkeit","re":"Bl 6 stimulieren und Unterarm nachunten massieren, ansonsten sofort neurologische Wiederherstellung"},{"id":"Bl 10","m":"Bl","n":10,"lok":"1,3 cun seitlich der Körpermittellinie und zwischen ersten und zweiten Halswirbel, 0,5 cun über dem Haaransatz","ri":"45° nach oben oder unten","akt":"Schlagpunkt","wi":"Schwindelgefühl, Atembeschwerden, Bewusstlosigkeit, Tod","re":"Gb 20 zur Kopfmitte stimulieren, bei Bewusst-losigkeit sofort neurologische Wiederherstellung"},{"id":"Bl 14","m":"Bl","n":14,"lok":"1,5 cun seitlich der Körpermittellinie, auf Höhe des vierten Brustwirbels","ri":"Direkt 90° oder Richtung Herz","akt":"Schlag- und Druckpunkt","wi":"Herz- und Nierenschädigung, Herzrhythmusstörungen oder Herzstillstand","re":"Stimulieren von Ni 1, He 3, oder Pe 1"},{"id":"Bl 15","m":"Bl","n":15,"lok":"1,5 cun seitlich der Körpermittellinie, auf Höhe des fünften Brustwirbels","ri":"Direkt 90° oder Richtung Herz","akt":"Schlag- und Druckpunkt","wi":"Herz- und Lungenschädigung, Atembe-schwerden, Herzstillstand","re":"Qi- Gong Übungen, die das Gleichgewicht zwischen Yin und Yang wiederherstellen"},{"id":"Bl 16","m":"Bl","n":16,"lok":"1,5 cun seitlich der Körpermittellinie, auf Höhe des sechsten Brustwirbels","ri":"Direkt 90° in den Rücken","akt":"Schlagpunkt","wi":"Lungenbeschwerden, Atemnot, Tod kann verzögert durch Ersticken in der Nacht eintreten","re":"Linke Handfläche auf LG 20 und rechte Handfläche auf Di 14 drücken und massieren"},{"id":"Bl 36","m":"Bl","n":36,"lok":"In Mitte Gesäßfalte","ri":"45° nach oben Richtung Gesäß","akt":"Schlagpunkt","wi":"Übelkeit, Bewusstlosigkeit","re":"Gb 21 schlagen und stark über Schulter abstreifen"},{"id":"Bl 39","m":"Bl","n":39,"lok":"Am Außenrand der Kniefalte","ri":"Direkt 90° von hinten","akt":"Schlagpunkt","wi":"Blase- und Nierenschädigung","re":"Sofort Arzt aufsuchen"},{"id":"Bl 40","m":"Bl","n":40,"lok":"In Mitte der Kniegelenkfalte","ri":"Direkt 90° nach innen","akt":"Schlagpunkt","wi":"örtlich","re":"Linke Handfläche auf LG 20 und rechte Handfläche auf Di 14 drücken und massieren"},{"id":"Bl 53","m":"Bl","n":53,"lok":"In der Mitte des Hüftknochens, 3 cun seitlich der Körpermittellinie","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Funktionsstörung der Blase, Bewusstlosigkeit","re":"Sofort Arzt aufsuchen"},{"id":"Bl 55","m":"Bl","n":55,"lok":"2 cun unter der Kniegelenksfalte","ri":"90° nach innen oder unten","akt":"Schlagpunkt","wi":"Wadenmuskulatur verkrampft, Blackout","re":"Wadenbein abwärts massieren"},{"id":"Bl 56","m":"Bl","n":56,"lok":"In der Mitte der Wade zwischen Bl 55 und Bl 57","ri":"90° nach innen","akt":"Schlagpunkt","wi":"Wadenmuskulatur verkrampft, Körperschock","re":"Arzt aufsuchen"},{"id":"Bl 57","m":"Bl","n":57,"lok":"Am Ende des Wadenmuskels in der Mitte der Wade","ri":"90° nach innen","akt":"Schlagpunkt","wi":"Kontrollverlust über das Bein, Körperschock","re":"Wadenbein abwärts und Bl 58 massieren"},{"id":"Bl 59","m":"Bl","n":59,"lok":"3 cun über Knöchel hinten an der Außenseite des Beines","ri":"45° von der Seite","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Augenprobleme, Kopfschmerzen","re":"Arzt aufsuchen"},{"id":"Ni 1","m":"Ni","n":1,"lok":"In der Mitte der Fußsohle, in einer Vertiefung am Ende des ersten Drittels der Fußsohle","ri":"Direkt 90° nach innen","akt":"Schlag- und Druckpunkt","wi":"Dieser Punkt ist ein reiner Wiederbelebungspunkt (Herz-Starter)","re":"Nicht zutreffend"},{"id":"Ni 10","m":"Ni","n":10,"lok":"In der Kniebeuge am inneren Rand","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Schwächegefühl, Nierenversagen, Herzschaden, Bewusstlosigkeit","re":"Erste Hilfe; sofort Arzt aufsuchen"},{"id":"Ni 12","m":"Ni","n":12,"lok":"4 cun unter Bauchnabel und 0,5 cun neben der Körpermitte, über Schambein","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Verwirrung, sexuelle Probleme, Bewusstlosigkeit","re":"Druck auf Bl 10 und Dü 11"},{"id":"Ni 13","m":"Ni","n":13,"lok":"3 cun unter Bauchnabel und 0,5 cun neben der Körpermitte","ri":"Direkt 90° nach innen","akt":"Schlagpunkt","wi":"Schwächegefühl, Bewusstlosigkeit","re":"LG 14 stimulieren"},{"id":"Ni 14","m":"Ni","n":14,"lok":"2 cun unter Bauchnabel und 0,5 cun neben Körpermitte","ri":"435° nach unten","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Bei Bewusstlosigkeit sofort neurologische Wiederherstellung"},{"id":"Ni 17","m":"Ni","n":17,"lok":"2 cun über Bauchnabel und 0,5 cun neben Körpermitte","ri":"45° nach unten","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Kopf des Getroffenen zwischen seine Beine legen und drei Sekunden lang mit einem Finger den Rücken entlang Druck ausüben"},{"id":"Ni 19","m":"Ni","n":19,"lok":"4 cun über Buchnabel und 0,5 cun neben Körpermittellinie","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Verkrampfung des gesamten Oberkörpers, Atemnot, Bewusstlosigkeit","re":"Durch Doppelnelson-Griff die Verkrampfung und Atemnot lösen, bei Bewusstlosigkeit sofort neurologisch Wiederherstellung"},{"id":"Ni 20","m":"Ni","n":20,"lok":"5 cun über Bauchnabel und 0,5 cun neben Körpermittellinie","ri":"45° von außen Richtung Körpermittellinie","akt":"Schlagpunkt","wi":"Verkrampfung des gesamten Oberkörpers, Atemnot, Bewusstlosigkeit","re":"Durch Doppelnelson-Griff die Verkrampfung und Atemnot lösen, bei Bewusstlosigkeit sofort neurologische Wiederherstellung"},{"id":"Ni 21","m":"Ni","n":21,"lok":"6 cun über Bauchnabel und 0,5 cun neben Körpermittellinie","ri":"45° von außen Richtung Körpermittellinie","akt":"Schlagpunkt","wi":"Herzstillstand","re":"Sofort reanimieren und Notarzt rufen"},{"id":"Ni 22","m":"Ni","n":22,"lok":"Im fünften Interkostalraum (siehe Seite 247) und 2 cun neben der Körpermittellinie","ri":"Direkt 90° nach innen","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Verkrampfung des Oberkörpers, Herzstillstand","re":"Bei Herzstillstand auf LG 20 Richtung Kopfmitte"},{"id":"Ni 23","m":"Ni","n":23,"lok":"Im vierten Interkostalraum auf Höhe der Brustwarzen und 2 cun neben der Körpermittellinie","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit, Herzstillstand","re":"Bei Herzstillstand sofort reanimieren, bei Qi-Schaden (Bewusstlosigkeit, starkes Unwohlsein) sofort neurologische Wiederherstellung"},{"id":"Ni 24","m":"Ni","n":24,"lok":"Im dritten Interkostalraum und 2 cun neben der Körpermittellinie","ri":"45° nach unten","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Verkrampfung des Oberkörpers, Herzstillstand","re":"Bei Herzstillstand sofort reanimieren, bei örtlichem Schmerz Verkrampfung lösen"},{"id":"Ni 25","m":"Ni","n":25,"lok":"Im zweiten Interkostalraum und 2 cun neben der Körpermittellinie","ri":"45° nach unten","akt":"Schlagpunkt","wi":"Schwächegefühl, Schädigung der Lunge","re":"LG 20 stimulieren und die Innenseite des Unterarmes in Richtung Ellenbeuge reiben"},{"id":"Ni 26","m":"Ni","n":26,"lok":"Im ersten Interkostalraum und 2 cun neben der Körpermittellinie","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Schwächegefühl; Schädigung der Lunge, Bewusstlosigkeit","re":"LG 20 stimulieren der Unterarminnenseite in Richtung Ellenbeuge reiben"},{"id":"Ni 27","m":"Ni","n":27,"lok":"Zwischen erster Rippe und Schlüsselbein, 2 cun neben der Körpermittellinie","ri":"45° nach oben","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Akupunkteur oder Arzt aufsuchen"},{"id":"Pe 1","m":"Pe","n":1,"lok":"1 cun seitlich der Brustwarzen an der Körperaußenseite","ri":"45° zur Körpermitte","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Atemnot, Schädigung von Herz und Lunge","re":"Druck auf Pe 1 auf der gegenüberliegenden Seite"},{"id":"Pe 2","m":"Pe","n":2,"lok":"2 cun unter der Achselfalte in der Mitte des Oberarms","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Örtlicher Schmerz, Lähmung des Arms, Bewusstlosigkeit","re":"Massage von KG 17 bis KG 14"},{"id":"Pe 3","m":"Pe","n":3,"lok":"In Mitte der Ellenbogenfalte","ri":"45° Richtung Knochen oder nach oben oder unten","akt":"Schlag- und Druckpunkt","wi":"Wird der Punkt zum Oberarm hin stimuliert, wird die Lunge geschädigt, bei einem Angriff Richtung Handgelenk, wird das Herz geschädigt","re":"Bei Übelkeit Pe 6 leicht aufwärts drücken, um das Yang-Qi zurückführen; Ni 1 drücken; bei Herz- oder Atemstillstand sofort reanimieren"},{"id":"Pe 6","m":"Pe","n":6,"lok":"2 cun über Handgelenksfalte zwischen den Sehnen","ri":"45° Richtung Hand oder direkt 90°","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, oder Yin- und Yang-Gleichgewicht wird gestört, evtl. Herzstillstand","re":"Druck und Massage Pe 6 auf der gegenüberliegenden Seite"},{"id":"Pe 8","m":"Pe","n":8,"lok":"In Handfläche zwischen Mittel- und Ringfinger","ri":"Druck 90° oder 45° Richtung Ringfinger","akt":"Druckpunkt","wi":"Erhöhung des Herzschlages","re":"Druck und Massage Pe 8 auf der gegenüberliegenden Seite"},{"id":"3E 1","m":"3E","n":1,"lok":"An der Nagelaußenseite des Ringfingers direkt 90°","ri":"direkt 90°","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Schwächegefühl","re":"Wirkung lassen von allein wieder nach"},{"id":"3E 3","m":"3E","n":3,"lok":"Auf dem Handrücken, in Vertiefung zwischen dem vierten und dem fünften Knochen","ri":"Nach innen zum Kleinfingerknochen","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Körperverspannung auf der getroffenen Seite, Gehörschaden","re":"Massage des getroffenen Punktes"},{"id":"3E 6","m":"3E","n":6,"lok":"3 cun über der Handgelenksfalte, Mitte des Unterarms zwischen Elle und Speiche","ri":"90° in den Arm","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, Unwohlsein, Schwächegefühl","re":"3E 6 auf der gegenüberliegender Seite tief massieren"},{"id":"3E 7","m":"3E","n":7,"lok":"3 cun über Handgelenksfalte; am Rand der Elle","ri":"90° in den Arm","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, Qi-Störung","re":"3E 7 auf gegenüberliegender Seite tief massieren"},{"id":"3E 9","m":"3E","n":9,"lok":"7 cun über Handgelenksseite, zwischen Elle und Speiche","ri":"direkt 90°","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, Qi-Störung, Bewusstlosigkeit","re":"Massage im gesamten Gebiet um den getroffenen Punkt"},{"id":"3E 11","m":"3E","n":11,"lok":"2 cun über Ellenbogen","ri":"direkt 90° oder 45° Richtung Ellenbogen","akt":"Schlag- und Reibepunkt","wi":"Örtlicher Schmerz, schwächt das Ellenbogengelenk","re":"Bei Ellenbogenbruch Arzt aufsuchen"},{"id":"3E 12","m":"3E","n":12,"lok":"Im Zentrum des Trizepses","ri":"direkt 90° oder aufwärts","akt":"Schlag-, Druck- und Reibepunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Arm leicht ausschütteln und von oben nach unten reiben, danach Di 10 und im Anschluss 3E 8 drücken"},{"id":"3E 16","m":"3E","n":16,"lok":"Am hinteren Rand des Handgelenkmuskels auf Höhe des Kieferwinkels (Übergang des Unterkieferkörpers in den aufsteigenden Ast des Unterkiefers)","ri":"direkt 90°","akt":"Schlag- und Druckpunkt","wi":"Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"3E 17","m":"3E","n":17,"lok":"Hinter Ohrläppchen","ri":"Richtung Nasenspitze oder nach oben","akt":"Schlag- und Druckpunkt","wi":"Örtlicher Schmerz, Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"3E 18","m":"3E","n":18,"lok":"Hinter dem Ohr, 1 cun über 3E 17","ri":"Richtung Nasenspitze","akt":"Schlag- und Druckpunkt","wi":"Gehirnschock, Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"3E 19","m":"3E","n":19,"lok":"Hinter dem Ohr, 2 cun über 3E 17","ri":"45° Richtung Nasenspitze","akt":"Schlag- und Druckpunkt","wi":"Desorientierung, Bewusstlosigkeit","re":"Sofort neurologische Wiederherstellung"},{"id":"3E 23","m":"3E","n":23,"lok":"Vertiefung an der Außenseite der Augenbraue","ri":"45° Richtung Nasenspitze","akt":"Schlag- und Druckpunkt","wi":"Augenverletzung, Bewusstlosigkeit","re":"Druck auf Gb 20 aufwärts; ist das Auge betroffen, Gb 3 auf der gegenüberliegenden Seite massieren"},{"id":"Gb 1","m":"Gb","n":1,"lok":"Vertiefung am äußeren Augenwinkel","ri":"45° Richtung Auge","akt":"Schlag- und Druckpunkt","wi":"Augenverletzung, Übelkeit, Bewußtlosigkeit","re":"LG 26 Richtung Nase bzw. Kopf drücken"},{"id":"Gb 8","m":"Gb","n":8,"lok":"1,5 cun oberhalb Ohrespitze","ri":"Direkt 90°","akt":"Schlag-, Druck- und Reibepunkt","wi":"Verlust des Erinnerungsvermögens, Bewusstlosigkeit","re":"Bl 10 aufwärts drücken"},{"id":"Gb 9","m":"Gb","n":9,"lok":"0,5 cun hinter Gb 08","ri":"Direkt 90°","akt":"Schlag-, Druck- und Reibepunkt","wi":"Bewusstlosigkeit","re":"Gb 20 aufwärts drücken"},{"id":"Gb 10","m":"Gb","n":10,"lok":"Auf Höhe der Ohrspitze, 1 cun über Haaransatz","ri":"Direkt 90°","akt":"Schlag-, Druck- und Reibepunkt","wi":"Nervensystem wird geschädigt, Gehirnschock, Bewusstlosigkeit","re":"LG 26 bei Schock drücken, ansonsten sofort neurologische Wiederherstellung"},{"id":"Gb 13","m":"Gb","n":13,"lok":"Senkrecht oberhalb des äußeren Augenwinkels, 0,5 cun oberhalb des Haaransatzes","ri":"30° Richtung Kopfmitte","akt":"Schlagpunkt","wi":"Gehirnfunktionsstörung, Bewusstlosigkeit","re":"Sofortige neurologische Wiederherstellung; Arzt oder Akupunkteur aufsuchen"},{"id":"Gb 14","m":"Gb","n":14,"lok":"1 cun oberhalb Mitte der Augenbraue","ri":"45° nach oben oder unten","akt":"Schlagpunkt","wi":"Übelkeit, Schaden am Hals, Bewusstlosigkeit","re":"Bei abwärts geführten Angriff Gb 20 drücken, bei aufwärts geführten Angriff Gb 21 drücken und danach mit beiden Händen Richtung Schulter reiben"},{"id":"Gb 15","m":"Gb","n":15,"lok":"Senkrecht über Gb 14, 0,5 cun oberhalb des Haaransatzes","ri":"Direkt 90°","akt":"Schlagpunkt","wi":"Orientierungsverlust, Bewusstlosigkeit","re":"Gb 20 drücken"}];
+
+const MER = {
+  "Lu":{n:11,name:"Lunge",el:"Metall",yy:"Yin",t:[3,5],kyu:8,book:true,
+        path:"Beginnt an der Brust, verläuft an der Innenseite des Arms bis zur Hand.",fn:"Lunge und Immunsystem."},
+  "Di":{n:20,name:"Dickdarm",el:"Metall",yy:"Yang",t:[5,7],kyu:8,book:true,
+        path:"Beginnt am Zeigefinger, verläuft entlang des Arms und Schulterbereichs.",fn:"Verdauung und Ausscheidung von Abfallstoffen."},
+  "Ma":{n:45,name:"Magen",el:"Erde",yy:"Yang",t:[7,9],kyu:7,book:true,
+        path:"Laut Skript am Fuß beginnend, entlang Bein und Bauch bis zur Brust.",fn:"Verdauung und Ernährung des Körpers."},
+  "Mi":{n:21,name:"Milz-Pankreas",el:"Erde",yy:"Yin",t:[9,11],kyu:7,book:true,
+        path:"Beginnt am großen Zeh, verläuft entlang Bein und Bauch.",fn:"Stoffwechsel, Blutzucker und Verdauung."},
+  "He":{n:9,name:"Herz",el:"Feuer",yy:"Yin",t:[11,13],kyu:6,
+        path:"Laut Skript am kleinen Finger beginnend, entlang Arm und Brust.",fn:"Herzfunktion, Kreislauf, emotionale Aspekte des Herzens."},
+  "Dü":{n:19,name:"Dünndarm",el:"Feuer",yy:"Yang",t:[13,15],kyu:6,
+        path:"Beginnt am kleinen Finger, verläuft entlang Arm und Schulter.",fn:"Verdauung und Aufnahme von Nährstoffen."},
+  "Bl":{n:67,name:"Blase",el:"Wasser",yy:"Yang",t:[15,17],kyu:5,
+        path:"Beginnt am inneren Augenwinkel, über Kopf und Rücken bis zum Fuß.",fn:"Ausscheidung und Wasserhaushalt."},
+  "Ni":{n:27,name:"Niere",el:"Wasser",yy:"Yin",t:[17,19],kyu:5,
+        path:"Beginnt am Fuß, entlang Bein und Rumpf bis zur Brust.",fn:"Nierenfunktion, Wasserhaushalt, Fortpflanzung."},
+  "Pe":{n:9,name:"Herzbeutel (Perikard)",el:"Feuer",yy:"Yin",t:[19,21],kyu:4,
+        path:"Laut Skript am Brustbein beginnend, entlang Arm und Handgelenk.",fn:"Herzfunktion, emotionale Regulation, Sexualität."},
+  "3E":{n:23,name:"Dreifacher Erwärmer",el:"Feuer",yy:"Yang",t:[21,23],kyu:4,
+        path:"Beginnt am Ringfinger, verläuft entlang Arm und Schulter.",fn:"Körpertemperatur, Hormone, Immunsystem."},
+  "Gb":{n:44,name:"Gallenblase",el:"Holz",yy:"Yang",t:[23,1],kyu:3,
+        path:"Beginnt am äußeren Augenwinkel, über Kopf und Schulter bis zum Fuß.",fn:"Verdauung und Stoffwechsel, besonders Fettverdauung."},
+  "Le":{n:14,name:"Leber",el:"Holz",yy:"Yin",t:[1,3],kyu:3,
+        path:"Beginnt an der großen Zehe, über Fuß, Bein und Leiste bis zum Bauch.",fn:"Stoffwechsel, Entgiftung, Blutspeicherung."}
+};
+const MER_ORDER = ["Lu","Di","Ma","Mi","He","Dü","Bl","Ni","Pe","3E","Gb","Le"];
+
+const ELEMENTS = [
+  {n:"Holz",kill:"Erde",gen:"Feuer",dachi:"Shiko-Dachi",rton:"außen = E",mton:"DSCH / SCH",finger:"Zeigefinger",c:"#5d9b5a",season:"Frühling",org:"Leber, Gallenblase",body:"Sehnen, Nägel, Augen",emo:"Wut, Ärger",stands:"Wachstum, Expansion, Entscheidungsfähigkeit"},
+  {n:"Feuer",kill:"Metall",gen:"Erde",dachi:"Zenkutsu-Dachi",rton:"oben = A",mton:"KKH / HHH",finger:"Mittelfinger",c:"#d4483b",season:"Sommer",org:"Herz, Dünndarm, Herzbeutel, Dreifacher Erwärmer",body:"Kreislaufsystem, Zunge, Sprache",emo:"Freude, Übererregbarkeit",stands:"Leidenschaft"},
+  {n:"Erde",kill:"Wasser",gen:"Metall",dachi:"Kiba-Dachi",rton:"vorne = O, hinten = Ü",mton:"RRH / RRR",finger:"Daumen",c:"#d9b13b",season:"Spätsommer",org:"Milz, Magen",body:"Muskeln, Mund, Lippen",emo:"Sorge, Gedanken",stands:"Stabilität"},
+  {n:"Metall",kill:"Holz",gen:"Wasser",dachi:"Neko-Ashi-Dachi",rton:"innen = I",mton:"TTH / SSS",finger:"Ringfinger",c:"#b9bec4",season:"Herbst",org:"Lunge, Dickdarm",body:"Haut, Haar, Sinnesorgane",emo:"Trauer, Melancholie",stands:"Klarheit"},
+  {n:"Wasser",kill:"Feuer",gen:"Holz",dachi:"Kosa-Dachi / Tsuru-Ashi-Dachi",rton:"unten = U",mton:"PPH / FFF",finger:"kleiner Finger",c:"#3f7fc4",season:"Winter",org:"Niere, Blase",body:"Knochen, Ohren, Fortpflanzungsorgane",emo:"Angst, Furcht",stands:"Ruhe, Weisheit, Regeneration"}
+];
+const EL_COLOR = Object.fromEntries(ELEMENTS.map(e=>[e.n,e.c]));
+const ELX = Object.fromEntries(ELEMENTS.map(e=>[e.n,e]));
+ELEMENTS.forEach(e=>{ e.weak = ELEMENTS.find(x=>x.gen===e.n).n; }); // Kind schwächt Mutter
+const MER_BY_EL = n=>MER_ORDER.filter(m=>MER[m].el===n).map(m=>MER[m].name).join(", ");
+
+const GRADES = [
+  {k:"9",name:"9. Kyu",belt:"Weißgurt",col:"#f2f2f2",topic:"Grundlagen der Theorie",
+   kata:["Shotokan: Taikyoku Shodan","Goju-Ryu: Taikyoku Shodan","Wado-Ryu: Kihon Kata"],kihon:"5 Kihon-Sequenzen",
+   pts:{},theory:["5 Elemente","12 Meridiane","2 Gefäße","Maßeinheit cun"],kuatsu:0,bunkai:2,sv:1,
+   att:["Handgreifen von vorn","Greifen von hinten"]},
+  {k:"8",name:"8. Kyu",belt:"Gelbgurt",col:"#f2cf2c",topic:"Lunge · Dickdarm",
+   kata:["Shotokan: Heian Shodan","Goju-Ryu: Gekisai-Dai-Ichi","Wado-Ryu: Pinan Shodan"],kihon:"6 Kihon-Sequenzen",
+   pts:{"Lu":[1,5,8,9,10],"Di":[4,5,10,13,17,18,20]},theory:["3 Zyklen"],kuatsu:1,bunkai:3,sv:1,
+   att:["Handgreifen von vorn","Griff an Kleidung von vorne"]},
+  {k:"7",name:"7. Kyu",belt:"Orangegurt",col:"#ee8a2a",topic:"Magen · Milz",
+   kata:["Shotokan: Heian Nidan","Goju-Ryu: Gekisai-Dai-Ni","Wado-Ryu: Pinan Nidan"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"Ma":[2,3,5,6,7,9,11,12,15,18,25,34,36],"Mi":[6,9,10,11,17,21]},theory:[],kuatsu:2,bunkai:4,sv:1,
+   att:["Handgreifen von vorn","Greifen von hinten","Faustschlag gerade","Tritt gerade (Mae-Geri)"]},
+  {k:"6",name:"6. Kyu",belt:"Grüngurt",col:"#3e9a4c",topic:"Herz · Dünndarm",
+   kata:["Shotokan: Heian Sandan","Goju-Ryu: Saifa","Wado-Ryu: Pinan Sandan"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"He":[1,2,3,4,5,6,8],"Dü":[6,16,17,18,19]},theory:[],kuatsu:3,bunkai:4,sv:1,
+   att:["Greifen einseitig, beidseitig","Griff an Kleidung einseitig","Umklammern von hinten","Faustschlag gerade","Tritt gerade (Mae-Geri)"]},
+  {k:"5",name:"5. Kyu",belt:"Blaugurt",col:"#2f63b8",topic:"Blase · Niere",
+   kata:["Shotokan: Heian Yondan","Goju-Ryu: Gekisai-Dai-Ni","Wado-Ryu: Pinan Yondan"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"Bl":[2,10,13,14,15,23,55,56,57],"Ni":[1,2,6,23,27]},theory:[],kuatsu:4,bunkai:4,sv:1,
+   att:["Arm-/Handgreifen beidseitig","Griff an Kleidung beidseitig","Umklammern von vorn","Faustschlag gerade","Tritt gerade (Mae-Geri)","Tritt im Halbkreis (Mawashi-Geri)"]},
+  {k:"4",name:"4. Kyu",belt:"Blaugurt",col:"#2f63b8",topic:"Herzbeutel · Dreifacher Erwärmer",
+   kata:["Shotokan: Heian Godan","Goju-Ryu: Seienchin","Wado-Ryu: Pinan Godan"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"Pe":[1,2,6,7,8],"3E":[3,10,11,12,15,17,21,23]},theory:[],kuatsu:4,bunkai:5,sv:1,
+   att:["Arm-/Handgreifen beidseitig","Griff an Kleidung beidseitig","Umklammern von vorn","Faustschlag gerade","Tritt gerade (Mae-Geri)","Tritt im Halbkreis (Mawashi-Geri)","Seitlicher Tritt (Yoko-Geri)"]},
+  {k:"3",name:"3. Kyu",belt:"Braungurt",col:"#7a4a26",topic:"Gallenblase · Leber",
+   kata:["Shotokan: Tekki Shodan","Goju-Ryu: Tensho","Wado-Ryu: Naihanchi"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"Gb":[2,8,9,13,14,15,20,21,22,24,25,31,32,34],"Le":[7,8,9,13,14]},theory:[],kuatsu:6,bunkai:6,sv:2,
+   att:["Würgen von vorne","Griff beliebig","Umklammern beliebig","Faustschlag-Kombination","Tritt beliebig, vorderes Bein","Stockangriff von oben","Stockangriff von außen"]},
+  {k:"2",name:"2. Kyu",belt:"Braungurt",col:"#7a4a26",topic:"Lenkergefäß · Konzeptionsgefäß",
+   kata:["Shotokan: Bassai-Dai","Goju-Ryu: Sanseru","Wado-Ryu: Naihanchi"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"LG":[20,26,27],"KG":[3,4,5,12,14,17,24]},theory:[],kuatsu:7,bunkai:6,sv:2,
+   att:["Stoß beliebig","Griff beliebig","Umklammern beliebig","Faustschlag beliebig","Faustschlag-Kombination","Tritt beliebig, hinteres Bein","Stockangriff von oben"]},
+  {k:"1",name:"1. Kyu",belt:"Braungurt",col:"#7a4a26",topic:"Sonderpunkte",
+   kata:["Shotokan: Jion, Kanku-Dai, Empi","Goju-Ryu: Sanseru, Sanchin","Wado-Ryu: Cinto"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{"M-HN":[3,18]},theory:[],kuatsu:8,bunkai:6,sv:2,
+   att:["Würgen von vorne","Würgen von hinten","Greifen beliebig","Umklammern beliebig","Faustschlag-Kombination","Tritt-Kombination","Stockangriff von oben","Stockangriff von außen","Stockangriff Rückhand"]},
+  {k:"dan",name:"Dan",belt:"Schwarzgurt",col:"#111",topic:"Prinzipien: Stände, Töne, Go-Ju",
+   kata:["Shotokan: Jion, Kanku-Dai, Empi","Goju-Ryu: Sanseru, Sanchin","Wado-Ryu: Cinto"],kihon:"6–8 Kihon-Sequenzen",
+   pts:{},theory:[],kuatsu:9,bunkai:6,sv:2,
+   att:["Greifen beliebig","Umklammern beliebig","Würgen beliebig","Faustschlag beliebig","Tritt beliebig","Faustschlag-Kombination","Tritt-Kombination","Stockangriff beliebig"],
+   principles:["Einfach: Zerstörung/Schwächung, Yin-Yang","Komplex: Stände, Töne, Go-Ju"]}
+];
+// cumulative exam points: id -> grade name where it first appears
+const EXAM_FROM = {};
+GRADES.forEach(g=>{for(const m in g.pts){g.pts[m].forEach(n=>{const id=m+" "+n; if(!(id in EXAM_FROM)) EXAM_FROM[id]=g.name;});}});
+
+/* ---------- helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle = a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const pick = (a,n)=>shuffle(a).slice(0,n);
+const store = {
+  get(k,d){try{const v=localStorage.getItem("kyusho:"+k);return v?JSON.parse(v):d;}catch(e){return d;}},
+  set(k,v){try{localStorage.setItem("kyusho:"+k,JSON.stringify(v));}catch(e){}}
+};
+const danger = s=>/Herzstillstand|Bewusstlos|Gehirn|Bruch|Atemnot|Schädigung|Schaden/i.test(s);
+const merLabel = m=>MER[m]?MER[m].name:m;
+const MERS_WITH_POINTS = MER_ORDER.filter(m=>POINTS.some(p=>p.m===m));
+
+function figure(p,hidden){
+  if(!p.img) return "";
+  const mks=(p.mk||[]).map(([x,y])=>`<span class="mk" style="left:${x}%;top:${y}%"></span>`).join("");
+  return `<div class="fig${hidden?" hide":""}"><img src="${p.img}" alt="Körperbild mit Lage von ${esc(p.id)}" loading="lazy">${mks}${hidden?`<button type="button" class="figbtn">Punkt zeigen</button>`:""}</div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".figbtn"); if(!b) return;
+  const f=b.closest(".fig"); f.classList.toggle("hide"); b.textContent=f.classList.contains("hide")?"Punkt zeigen":"Punkt verbergen";
+});
+
+function chipGroup(el,key,def,onChange){
+  let sel=new Set(store.get(key,def));
+  const render=()=>{
+    el.innerHTML=MERS_WITH_POINTS.map(m=>{
+      const c=POINTS.filter(p=>p.m===m).length;
+      return `<button type="button" class="chip" data-m="${m}" aria-pressed="${sel.has(m)}">${m} · ${esc(merLabel(m))} <span style="opacity:.7">(${c})</span></button>`;
+    }).join("")+`<button type="button" class="chip" data-all="1">alle</button><button type="button" class="chip" data-none="1">keine</button>`;
+  };
+  el.addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    if(b.dataset.all) sel=new Set(MERS_WITH_POINTS);
+    else if(b.dataset.none) sel=new Set();
+    else { sel.has(b.dataset.m)?sel.delete(b.dataset.m):sel.add(b.dataset.m); }
+    store.set(key,[...sel]); render(); onChange(sel);
+  });
+  render();
+  return ()=>sel;
+}
+
+/* ---------- START: ladder ---------- */
+$("#ladder").innerHTML=GRADES.map(g=>`<button type="button" class="rung" data-k="${g.k}">
+  <span class="belt" style="background:${g.col}"></span>
+  <span class="t">${g.name}<small>${g.belt}</small><br><span class="muted small">${esc(g.topic)}</span></span>
+  <span class="go">Programm ›</span></button>`).join("");
+$("#ladder").addEventListener("click",e=>{const b=e.target.closest(".rung"); if(!b) return; showExam(b.dataset.k); location.hash="pruefung";});
+
+/* ---------- GRUNDLAGEN ---------- */
+$("#elements").innerHTML=ELEMENTS.map(e=>`<div class="panel el" style="--c:${e.c}">
+  <h3>${e.n}<span>${e.season}</span></h3>
+  <dl><dt>Meridiane</dt><dd>${e.org}</dd><dt>Körper</dt><dd>${e.body}</dd><dt>Emotion</dt><dd>${e.emo}</dd><dt>Steht für</dt><dd>${e.stands}</dd><dt>Zerstört</dt><dd><span class="pill" style="border-color:${EL_COLOR[e.kill]};color:${EL_COLOR[e.kill]}">${e.kill}</span></dd></dl>
+</div>`).join("");
+
+const fmtT = t=>String(t[0]).padStart(2,"0")+"–"+String(t[1]).padStart(2,"0")+" Uhr";
+$("#merTable tbody").innerHTML=MER_ORDER.map(m=>{const r=MER[m];return `<tr data-m="${m}">
+  <td class="code">${m}</td><td>${r.name}</td><td>${r.path}</td><td>${r.fn}</td>
+  <td><span class="pill" style="border-color:${EL_COLOR[r.el]};color:${EL_COLOR[r.el]}">${r.el}</span></td>
+  <td><span class="pill ${r.yy.toLowerCase()}">${r.yy}</span></td>
+  <td class="tnum">${fmtT(r.t)}</td><td class="tnum">${r.n}</td>
+  <td class="tnum">${r.kyu}. Kyu</td></tr>`;}).join("");
+
+(function drawClock(){
+  const svg=$("#clock"), cx=160, cy=160, R=140, r=78; let h="";
+  const pt=(a,rad)=>[cx+rad*Math.sin(a),cy-rad*Math.cos(a)];
+  MER_ORDER.forEach(m=>{
+    const d=MER[m], a0=d.t[0]/24*2*Math.PI, a1=(d.t[0]+2)/24*2*Math.PI;
+    const [x0,y0]=pt(a0,R),[x1,y1]=pt(a1,R),[x2,y2]=pt(a1,r),[x3,y3]=pt(a0,r);
+    const mid=(a0+a1)/2, [tx,ty]=pt(mid,(R+r)/2);
+    h+=`<g class="seg" data-m="${m}" tabindex="0" role="button" aria-label="${d.name}, ${fmtT(d.t)}"><path d="M${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1} L${x2},${y2} A${r},${r} 0 0 0 ${x3},${y3}Z" fill="${EL_COLOR[d.el]}" fill-opacity="${d.yy==="Yang"?0.85:0.45}" stroke="#0c0c0c" stroke-width="2"/>
+      <text x="${tx}" y="${ty+5}" text-anchor="middle" font-family="Jost" font-size="15" font-weight="500" fill="${d.yy==="Yang"?"#111":"#f1ece6"}">${m}</text></g>`;
+  });
+  [0,3,6,9,12,15,18,21].forEach(hh=>{const [x,y]=pt(hh/24*2*Math.PI,r-14);h+=`<text x="${x}" y="${y+4}" text-anchor="middle" font-size="11" fill="#a39b92" font-family="Source Sans 3">${hh}</text>`;});
+  h+=`<text x="160" y="155" text-anchor="middle" font-family="Jost" font-size="14" fill="#f1ece6" letter-spacing="2">ORGANUHR</text><text x="160" y="174" text-anchor="middle" font-size="11" fill="#a39b92" font-family="Source Sans 3">kräftig = Yang · blass = Yin</text>`;
+  svg.innerHTML=h;
+  const hl=m=>document.querySelectorAll("#merTable tr[data-m]").forEach(tr=>tr.style.background=tr.dataset.m===m?"#2a1d13":"");
+  svg.addEventListener("mouseover",e=>{const g=e.target.closest(".seg"); if(g) hl(g.dataset.m);});
+  svg.addEventListener("focusin",e=>{const g=e.target.closest(".seg"); if(g) hl(g.dataset.m);});
+  svg.addEventListener("click",e=>{const g=e.target.closest(".seg"); if(g) hl(g.dataset.m);});
+  svg.addEventListener("mouseleave",()=>hl(null));
+})();
+
+(function cycles(){
+  const svg=$("#cycles"), C=[150,150], R=105, NR=30;
+  const ang={Feuer:-90,Erde:-18,Metall:54,Wasser:126,Holz:198};
+  const P=n=>{const a=ang[n]*Math.PI/180;return [C[0]+R*Math.cos(a),C[1]+R*Math.sin(a)];};
+  const TXT={
+    sheng:"<p><b>Erzeugung</b> (Mutter-Kind): Holz nährt Feuer, Feuer ergibt Erde (Asche), Erde birgt Metall, Metall sammelt Wasser, Wasser lässt Holz wachsen. Der Kreis läuft außen herum.</p>",
+    ke:"<p><b>Zerstörung</b> (Kontrolle): Metall zerstört Holz, Holz zerstört Erde, Erde zerstört Wasser, Wasser zerstört Feuer, Feuer zerstört Metall. Die Pfeile bilden den Stern.</p><p>Die Kyusho-Tafel ordnet so jedem Meridianpaar das Element zu, das es zerstört: Lunge/Dickdarm → Holz, Magen/Milz → Wasser, Herz/Dünndarm → Metall, Blase/Niere → Feuer, Gallenblase/Leber → Erde.</p>",
+    wu:"<p><b>Schwächung</b>: Das Kind zehrt an der Mutter, der Erzeugungskreis läuft rückwärts. Feuer schwächt Holz, Erde schwächt Feuer, Metall schwächt Erde, Wasser schwächt Metall, Holz schwächt Wasser.</p>"};
+  function draw(c){
+    let h=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10Z" fill="#ed7d31"/></marker></defs>`;
+    h+=`<circle cx="150" cy="150" r="${R}" fill="none" stroke="#2d2a27"/>`;
+    ELEMENTS.forEach(e=>{const to=c==="sheng"?e.gen:c==="ke"?e.kill:e.weak;const a=P(e.n),b=P(to);
+      const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;
+      const s=[a[0]+ux*NR,a[1]+uy*NR], t=[b[0]-ux*(NR+4),b[1]-uy*(NR+4)];
+      let d; if(c==="ke") d=`M${s[0]},${s[1]} L${t[0]},${t[1]}`;
+      else { const sw=c==="sheng"?1:0; d=`M${s[0]},${s[1]} A${R},${R} 0 0 ${sw} ${t[0]},${t[1]}`; }
+      h+=`<path class="cyc" d="${d}" fill="none" stroke="#ed7d31" stroke-width="2.4" marker-end="url(#ah)"/>`;});
+    ELEMENTS.forEach(e=>{const [x,y]=P(e.n);h+=`<circle cx="${x}" cy="${y}" r="${NR}" fill="#161514" stroke="${e.c}" stroke-width="3"/><text x="${x}" y="${y+5}" text-anchor="middle" font-family="Jost, sans-serif" font-size="14" fill="#f1ece6">${e.n}</text>`;});
+    svg.innerHTML=h; $("#cycText").innerHTML=TXT[c];
+    document.querySelectorAll("#cycBtns .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===c));
+  }
+  $("#cycBtns").addEventListener("click",e=>{const b=e.target.closest("button"); if(b) draw(b.dataset.c);});
+  draw("sheng");
+  const pill=n=>`<span class="pill" style="border-color:${EL_COLOR[n]};color:${EL_COLOR[n]}">${n}</span>`;
+  $("#cycTable tbody").innerHTML=ELEMENTS.map(e=>`<tr><td>${pill(e.n)}</td><td>${pill(e.gen)}</td><td>${pill(e.kill)}</td><td>${pill(e.weak)}</td></tr>`).join("");
+  $("#toneTable tbody").innerHTML=["Metall","Erde","Feuer","Wasser","Holz"].map(n=>{const e=ELX[n];return `<tr><td>${pill(n)}</td><td>${MER_BY_EL(n)}</td><td>${e.dachi}</td><td><b>${e.rton}</b></td><td class="code">${e.mton}</td><td>${e.finger}</td></tr>`;}).join("");
+  // hand
+  const F=[["kleiner Finger",96,64],["Ringfinger",130,40],["Mittelfinger",164,30],["Zeigefinger",198,44]];
+  const ee=ELEMENTS.find(z=>z.finger==="Daumen");
+  let hh=`<g transform="rotate(48 206 196)"><rect x="192" y="112" width="28" height="92" rx="14" fill="#2a2420" stroke="${ee.c}" stroke-width="2.5"/></g>`;
+  hh+=`<path d="M80,118 L216,118 C220,160 214,200 196,222 L100,222 C86,200 78,160 80,118Z" fill="#2a2420" stroke="#5a4f46" stroke-width="1.5"/>`;
+  F.forEach(([f,x,top])=>{const e=ELEMENTS.find(z=>z.finger===f);
+    hh+=`<rect x="${x-14}" y="${top}" width="28" height="${130-top}" rx="14" fill="#2a2420" stroke="${e.c}" stroke-width="2.5"/>`;
+    hh+=`<text x="${x}" y="${top-8}" text-anchor="middle" font-family="Jost, sans-serif" font-size="12" fill="${e.c}">${e.n}</text>`;
+    hh+=`<text x="${x}" y="${top+20}" text-anchor="middle" font-size="8" fill="#a39b92" font-family="Source Sans 3, sans-serif">${f==="kleiner Finger"?"klein":f.replace("finger","")}</text>`;});
+
+  hh+=`<text x="270" y="122" text-anchor="middle" font-family="Jost, sans-serif" font-size="12" fill="${ee.c}">${ee.n}</text><text x="270" y="134" text-anchor="middle" font-size="8" fill="#a39b92" font-family="Source Sans 3, sans-serif">Daumen</text>`;
+  hh+=`<text x="148" y="180" text-anchor="middle" font-size="11" fill="#a39b92" font-family="Source Sans 3, sans-serif">Handfläche</text>`;
+  $("#hand").innerHTML=hh;
+})();
+$("#neuroList").textContent=POINTS.filter(p=>/neurologische/i.test(p.re)).map(p=>p.id).join(", ");
+
+/* ---------- ANIMATIONEN (schematische Körperskizzen) ---------- */
+const SCN = {
+  front:{vb:[0,0,240,460],z:[96,120],sym:"sym-front",label:"Ansicht von vorne",badge:"Vorderseite",hint:"Person schaut dich an"},
+  back:{vb:[0,0,240,460],z:[96,120],sym:"sym-back",label:"Ansicht von hinten",badge:"Rückseite",hint:"Blick auf den Rücken"},
+  head:{vb:[0,0,240,260],z:[112,140],sym:"sym-head",label:"Kopf und Hals von der Seite",badge:"Seitenansicht",hint:"Gesicht links"},
+  sole:{vb:[0,0,120,220],z:[80,100],sym:"sym-sole",label:"Fußsohle",badge:"Fußsohle",hint:"von unten gesehen"}
+};
+// Meridianverlauf je Ansicht, Punkte in Fließrichtung (klassische TCM)
+const MPATH = {
+  "Lu":{front:[[[150,112],[156,104],[168,102],[196,176],[210,244],[212,251],[214,262],[222,282]]]},
+  "Di":{back:[[[220,298],[217,266],[212,251],[198,188],[196,176],[188,149],[170,92],[150,86]]],
+        head:[[[214,236],[150,232],[134,200],[128,192],[110,176],[90,150],[76,124]]]},
+  "Ma":{head:[[[92,104],[92,114],[86,124],[82,146],[110,170],[130,152],[128,118],[120,72],[112,50]],[[110,170],[120,192],[114,228],[138,230],[140,256]]],
+        front:[[[124,66],[126,90],[144,90],[144,108],[144,140],[132,156],[132,200],[132,232],[146,252],[145,312],[146,355],[142,420],[143,446]]]},
+  "Mi":{front:[[[130,446],[129,428],[130,408],[128,348],[130,318],[128,285],[128,250],[140,230],[146,200],[156,146],[158,106],[164,156]]]},
+  "He":{front:[[[160,110],[172,153],[181,180],[198,244],[199.5,250],[206,274],[206,294]]]},
+  "Dü":{back:[[[204,294],[200,253],[199,247],[182,182],[166,110],[148,110],[132,96],[126,70]]],
+        head:[[[210,232],[170,214],[136,192],[136,164],[106,122],[140,110]]]},
+  "Bl":{head:[[[84,98],[82,90],[88,50],[130,30],[176,70],[170,142],[172,200],[176,256]]],
+        back:[[[126,62],[129,86],[129,117],[129,133],[129,228],[140,252],[138,333],[138,344],[137,372],[142,408],[146,425],[150,444]],[[136,90],[138,226],[146,333]]]},
+  "Ni":{sole:[[[60,70],[52,130],[44,180],[46,214]]],
+        front:[[[128,432],[128,333],[124,250],[123,224],[123,164],[132,138],[132,92]]]},
+  "Pe":{front:[[[150,128],[171,121],[186,179],[203,240],[211,268],[214,294]]]},
+  "3E":{back:[[[212,298],[208,268],[206,252],[201.5,234],[196,209],[188,178],[182.7,160],[176,137],[166,96],[140,86]]],
+        head:[[[206,236],[170,200],[150,163],[156,130],[167,122],[168,114],[160,90],[144,98],[105,89]]]},
+  "Gb":{head:[[[100,100],[140,112],[134,94],[130,74],[155,78],[160,78],[166,90],[170,112],[168,128],[150,62],[100,50],[92,80],[92,51],[140,36],[178,96],[176,140],[200,232]]]}
+};
+// Lage jedes Punktes: [Ansicht, x, y]
+const PPOS = {
+  "Lu 1":["front",156,104],"Lu 5":["front",196,176],"Lu 8":["front",210,244],"Lu 9":["front",212,251],"Lu 10":["front",214,262],
+  "Di 4":["back",217,266],"Di 5":["back",212,251],"Di 10":["back",198,188],"Di 13":["back",188,149],
+  "Di 17":["head",134,200],"Di 18":["head",128,192],"Di 20":["head",76,124],
+  "Ma 2":["head",92,114],"Ma 3":["head",86,124],"Ma 5":["head",110,170],"Ma 6":["head",130,152],"Ma 7":["head",128,118],
+  "Ma 9":["head",120,192],"Ma 11":["head",114,228],"Ma 12":["head",138,230],
+  "Ma 15":["front",144,108],"Ma 18":["front",144,140],"Ma 25":["front",132,200],"Ma 34":["front",145,312],"Ma 36":["front",146,355],
+  "Mi 6":["front",130,408],"Mi 9":["front",128,348],"Mi 10":["front",130,318],"Mi 11":["front",128,285],"Mi 17":["front",156,146],"Mi 21":["front",164,156],
+  "He 1":["front",160,110],"He 2":["front",172,153],"He 3":["front",181,180],"He 4":["front",198,244],"He 5":["front",198.7,247],"He 6":["front",199.5,250],"He 8":["front",206,274],
+  "Dü 6":["back",199,247],"Dü 16":["head",136,192],"Dü 17":["head",136,164],"Dü 18":["head",106,122],"Dü 19":["head",140,110],
+  "Bl 2":["head",82,90],"Bl 10":["head",170,142],
+  "Bl 14":["back",129,117],"Bl 15":["back",129,125],"Bl 16":["back",129,133],"Bl 53":["back",138,226],"Bl 36":["back",140,252],
+  "Bl 39":["back",146,333],"Bl 40":["back",138,333],"Bl 55":["back",138,344],"Bl 56":["back",137.5,358],"Bl 57":["back",137,372],"Bl 59":["back",142,408],
+  "Ni 1":["sole",60,70],"Ni 10":["front",128,333],"Ni 12":["front",123,224],"Ni 13":["front",123,218],"Ni 14":["front",123,212],
+  "Ni 17":["front",123,188],"Ni 19":["front",123,176],"Ni 20":["front",123,170],"Ni 21":["front",123,164],
+  "Ni 22":["front",132,138],"Ni 23":["front",132,128],"Ni 24":["front",132,118],"Ni 25":["front",132,109],"Ni 26":["front",132,100],"Ni 27":["front",132,92],
+  "Pe 1":["front",150,128],"Pe 2":["front",171,121],"Pe 3":["front",186,179],"Pe 6":["front",203,240],"Pe 8":["front",211,268],
+  "3E 1":["back",212,297],"3E 3":["back",208,268],"3E 6":["back",201.5,234],"3E 7":["back",196.6,235],"3E 9":["back",196,209],
+  "3E 11":["back",182.7,160],"3E 12":["back",176,137],
+  "3E 16":["head",150,163],"3E 17":["head",156,130],"3E 18":["head",167,122],"3E 19":["head",168,114],"3E 23":["head",105,89],
+  "Gb 1":["head",100,100],"Gb 8":["head",155,78],"Gb 9":["head",160,78],"Gb 10":["head",166,90],"Gb 13":["head",100,50],"Gb 14":["head",92,80],"Gb 15":["head",92,51]
+};
+const NO_LOK_NOTE = "Lage im Skript nicht angegeben, Position nach TCM-Standard skizziert.";
+
+function smooth(pts){
+  if(pts.length<3) return "M"+pts.map(p=>p.join(",")).join(" L");
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=0;i<pts.length-1;i++){
+    const p0=pts[Math.max(0,i-1)],p1=pts[i],p2=pts[i+1],p3=pts[Math.min(pts.length-1,i+2)];
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6], c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0]},${p2[1]}`;
+  }
+  return d;
+}
+const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+let animSeq=0;
+const LANDMARKS = {
+  front:[["Schlüsselbein",150,87],["Brustwarze",144,128],["Bauchnabel",120,200],["Ellenbogen",188,178],["Handgelenk",206,252],["Daumen",225,264],["Kniescheibe",138,330],["Innenknöchel",128,426],["Achsel",163,104]],
+  back:[["Ellenbogen",188,178],["Handgelenk",206,252],["Daumenseite",223,258],["Kleinfinger",200,286],["Kniekehle",138,333],["Wirbelsäule",120,170],["Gesäßfalte",120,256],["Außenknöchel",146,428]],
+  head:[["Ohr",153,104],["Kehlkopf",104,194],["Kieferwinkel",137,160],["Schlüsselbein",176,236],["Augenbraue",90,86],["Nasenflügel",68,124],["Haaransatz",118,58],["Auge",88,100]],
+  sole:[["Ferse",56,200],["Zehen",60,10]]
+};
+function zoomBox(p){
+  const [sc,x,y]=PPOS[p.id], S=SCN[sc], [vx,vy,vw,vh]=S.vb;
+  let [zw,zh]=S.z;
+  if((sc==="front"||sc==="back") && (y>232 && Math.abs(x-120)>70 || y>395)) {zw=64;zh=80;}
+  else if(sc==="head"){zw=96;zh=120;}
+  const zx=Math.min(Math.max(x-zw/2,vx),vx+vw-zw), zy=Math.min(Math.max(y-zh/2,vy),vy+vh-zh);
+  return [zx,zy,zw,zh];
+}
+function animSvg(p){
+  const pos=PPOS[p.id]; if(!pos) return "";
+  const [sc,x,y]=pos, S=SCN[sc], [vx,vy,vw,vh]=S.vb, [zx,zy,zw,zh]=zoomBox(p);
+  const full=`${vx} ${vy} ${vw} ${vh}`, zoom=`${zx.toFixed(1)} ${zy.toFixed(1)} ${zw} ${zh}`;
+  const col=MER[p.m]?EL_COLOR[MER[p.m].el]:"#ed7d31";
+  const paths=((MPATH[p.m]||{})[sc]||[]).map(smooth);
+  const others=POINTS.filter(q=>q.m===p.m&&q.id!==p.id&&PPOS[q.id]&&PPOS[q.id][0]===sc);
+  const D=9, uid="a"+(++animSeq), R=REDUCED;
+  const kv='keyTimes="0;0.3;0.42;0.9;1" calcMode="spline" keySplines="0.4 0 0.2 1;0 0 1 1;0.4 0 0.2 1;0 0 1 1"';
+  const fade=(vals,kt)=>R?"":`<animate attributeName="opacity" values="${vals}" keyTimes="${kt}" dur="${D}s" repeatCount="indefinite"/>`;
+  const ZOOMVIS="0;0;1;1;0;0", ZOOMKT="0;0.38;0.45;0.88;0.92;1";
+  let s=`<svg viewBox="${R?zoom:full}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animation: Lage von ${esc(p.id)}, ${S.label}">`;
+  if(!R) s+=`<animate attributeName="viewBox" values="${full};${full};${zoom};${zoom};${full}" ${kv} dur="${D}s" repeatCount="indefinite"/>`;
+  s+=`<use href="#${S.sym}" x="0" y="0" width="${vw}" height="${vh}"/>`;
+  // Orientierungsmarken (nur im Zoom)
+  const fs=(zw*0.052).toFixed(2), near=zw*0.16;
+  const lms=(LANDMARKS[sc]||[]).filter(([,lx,ly])=>lx>=zx+zw*0.16&&lx<=zx+zw*0.84&&ly>=zy+zh*0.2&&ly<=zy+zh*0.9&&Math.hypot(lx-x,ly-y)>near);
+  if(lms.length){
+    s+=`<g opacity="${R?1:0}">${fade(ZOOMVIS,ZOOMKT)}`;
+    lms.forEach(([l,lx,ly])=>{s+=`<circle cx="${lx}" cy="${ly}" r="${(zw*0.008).toFixed(2)}" fill="#8f857b"/><text x="${lx}" y="${(ly-zw*0.025).toFixed(1)}" text-anchor="middle" font-size="${fs}" fill="#a39b92" font-family="Source Sans 3, sans-serif" paint-order="stroke" stroke="#0b0a09" stroke-width="${(zw*0.012).toFixed(2)}">${l}</text>`;});
+    s+=`</g>`;
+  }
+  paths.forEach((d,i)=>{
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-opacity=".25" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+    s+=`<path id="${uid}p${i}" d="${d}" pathLength="100" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke" stroke-dasharray="100 100" stroke-dashoffset="${R?0:100}">`+
+       (R?"":`<animate attributeName="stroke-dashoffset" values="100;0;0;100" keyTimes="0;0.14;0.94;1" dur="${D}s" repeatCount="indefinite"/>`)+`</path>`;
+    if(!R) for(let k=0;k<3;k++) s+=`<circle r="${(zw*0.012).toFixed(2)}" fill="#fff" opacity=".9"><animate attributeName="r" values="2.2;2.2;${(zw*0.012).toFixed(2)};${(zw*0.012).toFixed(2)};2.2" ${kv} dur="${D}s" repeatCount="indefinite"/><animateMotion dur="3s" begin="${k}s" repeatCount="indefinite"><mpath href="#${uid}p${i}"/></animateMotion></circle>`;
+  });
+  others.forEach(q=>{const [,ox,oy]=PPOS[q.id]; s+=`<circle cx="${ox}" cy="${oy}" r="${(zw*0.012).toFixed(2)}" fill="${col}" stroke="#0b0a09" stroke-width=".4"/>`;});
+  // Fadenkreuz + Zoomrahmen in der Übersicht
+  if(!R){
+    s+=`<g opacity="0">${fade("0;0;1;1;0;0","0;0.12;0.16;0.33;0.4;1")}
+      <line x1="${vx}" y1="${y}" x2="${vx+vw}" y2="${y}" stroke="#ed7d31" stroke-opacity=".45" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+      <line x1="${x}" y1="${vy}" x2="${x}" y2="${vy+vh}" stroke="#ed7d31" stroke-opacity=".45" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+      <rect x="${zx}" y="${zy}" width="${zw}" height="${zh}" fill="none" stroke="#ed7d31" stroke-width="1.5" vector-effect="non-scaling-stroke" rx="3"/>
+      <text x="${zx+zw/2}" y="${zy-4}" text-anchor="middle" font-size="11" font-family="Jost, sans-serif" fill="#ed7d31">${esc(p.id)}</text></g>`;
+  }
+  // der Punkt selbst
+  const rBig=6, rSmall=(zw*0.03).toFixed(2);
+  s+=`<g opacity="${R?1:0}">${fade("0;0;1;1;0","0;0.12;0.16;0.94;1")}`+
+     `<circle cx="${x}" cy="${y}" r="3" fill="none" stroke="#ed7d31" stroke-width="2" vector-effect="non-scaling-stroke">`+
+     (R?"":`<animate attributeName="r" values="${rSmall};${zw*0.11}" dur="1.4s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values="1;0" dur="1.4s" repeatCount="indefinite"/>`)+`</circle>`+
+     `<circle cx="${x}" cy="${y}" r="${R?rSmall:rBig}" fill="#ed7d31" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke">`+
+     (R?"":`<animate attributeName="r" values="${rBig};${rBig};${rSmall};${rSmall};${rBig}" ${kv} dur="${D}s" repeatCount="indefinite"/>`)+`</circle></g>`;
+  // Namensschild im Zoom
+  const lfs=zw*0.075, right=x<zx+zw*0.6, lw=lfs*0.62*p.id.length+lfs*0.9, lh=lfs*1.45;
+  const lx=right?x+zw*0.07:x-zw*0.07-lw, ly=y-lh/2;
+  s+=`<g opacity="${R?1:0}">${fade(ZOOMVIS,ZOOMKT)}<line x1="${x}" y1="${y}" x2="${right?lx:lx+lw}" y2="${y}" stroke="#ed7d31" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+     <rect x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" width="${lw.toFixed(1)}" height="${lh.toFixed(1)}" rx="${(lh/2).toFixed(1)}" fill="#ed7d31"/>
+     <text x="${(lx+lw/2).toFixed(1)}" y="${(y+lfs*0.36).toFixed(1)}" text-anchor="middle" font-size="${lfs.toFixed(2)}" font-weight="600" font-family="Jost, sans-serif" fill="#1a0f06">${esc(p.id)}</text></g>`;
+  return s+`</svg>`;
+}
+function miniMap(p){
+  const [sc,x,y]=PPOS[p.id], S=SCN[sc], [vx,vy,vw,vh]=S.vb, [zx,zy,zw,zh]=zoomBox(p);
+  return `<svg class="mini" viewBox="${vx} ${vy} ${vw} ${vh}" aria-hidden="true"><use href="#${S.sym}" x="0" y="0" width="${vw}" height="${vh}"/>
+    <rect x="${zx}" y="${zy}" width="${zw}" height="${zh}" fill="rgba(237,125,49,.15)" stroke="#ed7d31" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <circle cx="${x}" cy="${y}" r="${vw*0.025}" fill="#ed7d31"/></svg>`;
+}
+function animBlock(p){
+  const pos=PPOS[p.id]; if(!pos) return "";
+  return `<div class="anim">${animSvg(p)}${miniMap(p)}<div class="animtag">${esc(p.id)}<small>${esc(merLabel(p.m))}</small></div><div class="animcap"><span><b class="vbadge v-${pos[0]}">${SCN[pos[0]].badge}</b> ${SCN[pos[0]].hint}</span><span>schematisch</span></div></div>`+
+         (!p.lok?`<p class="small muted" style="padding:6px 14px 0">${NO_LOK_NOTE}</p>`:"");
+}
+function mediaBlock(p,hideMk){
+  const a=animBlock(p);
+  if(!p.img) return a;
+  return `<div class="media" data-show="anim"><div class="mtabs" role="group" aria-label="Darstellung"><button type="button" data-v="anim" aria-pressed="true">Animation</button><button type="button" data-v="img" aria-pressed="false">Folienbild</button></div>
+    <div class="m-anim">${a}</div><div class="m-img">${figure(p,hideMk)}</div></div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".mtabs button"); if(!b) return;
+  const m=b.closest(".media"); m.dataset.show=b.dataset.v;
+  m.querySelectorAll(".mtabs button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+});
+// Animationen außerhalb des Bildschirms anhalten
+const animIO = ("IntersectionObserver" in window)? new IntersectionObserver(es=>es.forEach(en=>{
+  const s=en.target; try{ en.isIntersecting? s.unpauseAnimations(): s.pauseAnimations(); }catch(e){}
+}),{rootMargin:"100px"}) : null;
+function watchAnims(root){ if(!animIO) return; root.querySelectorAll(".anim svg").forEach(s=>{try{s.pauseAnimations();}catch(e){} animIO.observe(s);}); }
+
+/* ---------- ATLAS ---------- */
+function pointCard(p,hideMk){
+  const ex=EXAM_FROM[p.id];
+  return `<article class="pc" id="pt-${p.id.replace(" ","-")}">
+    <div class="ph"><b>${esc(p.id)}</b><span>${esc(merLabel(p.m))}${ex?` <span class="badge">Prüfung ab ${ex}</span>`:""}</span></div>
+    ${mediaBlock(p,hideMk)}
+    <dl>
+      <dt>Lokalisation</dt><dd>${esc(p.lok)}</dd>
+      <dt>Richtung</dt><dd>${esc(p.ri)}</dd>
+      <dt>Aktivierung</dt><dd>${esc(p.akt)}</dd>
+      <dt>Wirkung</dt><dd class="${danger(p.wi)?"warn":""}">${esc(p.wi)}</dd>
+      <dt>Reaktivierung</dt><dd>${esc(p.re)}</dd>
+    </dl></article>`;
+}
+let atlasSel;
+function renderAtlas(){
+  const q=$("#q").value.trim().toLowerCase(), sel=atlasSel(), hide=false;
+  const list=POINTS.filter(p=>(q?true:sel.has(p.m)) && (!q || [p.id,p.lok,p.ri,p.akt,p.wi,p.re,merLabel(p.m)].join(" ").toLowerCase().includes(q)));
+  $("#atlasCount").textContent=q?`${list.length} Treffer für „${$("#q").value.trim()}“ in allen Meridianen`:`${list.length} Punkte`;
+  $("#atlas").innerHTML=list.length?list.map(p=>pointCard(p,hide)).join(""):`<div class="empty">Keine Punkte ausgewählt. Wähle oben einen Meridian oder suche nach einem Begriff.</div>`;
+  watchAnims($("#atlas"));
+}
+atlasSel=chipGroup($("#atlasChips"),"atlasSel",["Lu","Di"],renderAtlas);
+$("#q").addEventListener("input",renderAtlas);
+renderAtlas();
+
+/* ---------- FLASHCARDS (Leitner) ---------- */
+let boxes=store.get("boxes",{}); // key mode|id -> 0..4
+let fcSel, fcCur=null, fcRevealed=false, fcLast=null;
+const fcKey=(mode,id)=>mode+"|"+id;
+function fcPool(){return POINTS.filter(p=>fcSel().has(p.m));}
+function updateKnown(){
+  const n=POINTS.filter(p=>(boxes[fcKey("lok",p.id)]||0)>=4 || (boxes[fcKey("all",p.id)]||0)>=4).length;
+  $("#statKnown").textContent=n;
+}
+function renderBoxes(){
+  const mode=$("#fcMode").value, pool=fcPool(), cnt=[0,0,0,0,0];
+  pool.forEach(p=>cnt[Math.min(4,boxes[fcKey(mode,p.id)]||0)]++);
+  const labels=["Neu","Fach 1","Fach 2","Fach 3","Fach 4"];
+  $("#fcBoxes").innerHTML=cnt.map((c,i)=>`<div class="boxrow"><span>${labels[i]}</span><span class="track"><i style="width:${pool.length?c/pool.length*100:0}%"></i></span><b>${c}</b></div>`).join("");
+  updateKnown();
+}
+function fcNext(){
+  const mode=$("#fcMode").value, pool=fcPool();
+  fcRevealed=false; $("#fcBack").classList.add("hidden"); $("#fcYes").disabled=$("#fcNo").disabled=true; $("#fcFlip").disabled=false;
+  if(!pool.length){fcCur=null;$("#fcAsk").textContent="";$("#fcFront").textContent="Keine Karten";$("#fcSub").textContent="Wähle oben mindestens einen Meridian.";$("#fcBack").innerHTML="";$("#fcFlip").disabled=true;renderBoxes();return;}
+  // weight: lower box = more likely
+  const w=pool.map(p=>{const b=boxes[fcKey(mode,p.id)]||0;return p.id===fcLast&&pool.length>1?0:Math.pow(2,4-Math.min(4,b));});
+  let r=Math.random()*w.reduce((a,b)=>a+b,0), i=0; while(r>w[i]){r-=w[i];i++;}
+  fcCur=pool[Math.min(i,pool.length-1)]; fcLast=fcCur.id;
+  const p=fcCur, lbl={lok:"Wo liegt der Punkt?",wi:"Welche Wirkung hat ein Treffer?",re:"Wie stellst du wieder her?",all:"Lage, Richtung, Aktivierung, Wirkung, Reaktivierung?"};
+  if(mode==="rev"){
+    $("#fcAsk").textContent="Welcher Punkt liegt hier?";
+    $("#fcFront").innerHTML=`<span style="font-size:1.35rem;color:var(--ink);font-family:var(--body);font-weight:600">${esc(p.lok)}</span>`;
+    $("#fcSub").textContent="Meridian: "+merLabel(p.m);
+  } else {
+    $("#fcAsk").textContent=lbl[mode];
+    $("#fcFront").textContent=p.id;
+    $("#fcSub").textContent=merLabel(p.m)+" · "+(MER[p.m]?MER[p.m].el+", "+MER[p.m].yy:"");
+  }
+  const row=(k,t,v,focus)=>`<dt>${t}</dt><dd class="${focus?"focus":""}">${esc(v)}</dd>`;
+  let dl="";
+  if(mode==="rev") dl=`<div class="big" style="font-family:var(--display);font-size:2rem;color:var(--accent)">${esc(p.id)}</div><dl>${row("ri","Richtung",p.ri)}${row("wi","Wirkung",p.wi)}${row("re","Reaktivierung",p.re)}</dl>`;
+  else if(mode==="all") dl=`<dl>${row("","Lokalisation",p.lok)}${row("","Richtung",p.ri)}${row("","Aktivierung",p.akt)}${row("","Wirkung",p.wi)}${row("","Reaktivierung",p.re)}</dl>`;
+  else { const t={lok:"Lokalisation",wi:"Wirkung",re:"Reaktivierung"}[mode];
+    dl=`<dl>${row("",t,p[mode],true)}</dl><dl class="muted small">${mode!=="lok"?row("","Lokalisation",p.lok):row("","Richtung",p.ri)}${row("","Aktivierung",p.akt)}</dl>`; }
+  $("#fcBack").innerHTML=`<div class="ans">${dl}</div><div class="qimg">${p.img?figure(p,false):animBlock(p)}</div>`;
+  watchAnims($("#fcBack"));
+  renderBoxes();
+}
+function fcReveal(){ if(!fcCur||fcRevealed) return; fcRevealed=true; $("#fcBack").classList.remove("hidden"); $("#fcYes").disabled=$("#fcNo").disabled=false; $("#fcFlip").disabled=true; $("#fcYes").focus(); }
+function fcGrade(ok){
+  if(!fcCur||!fcRevealed) return; const k=fcKey($("#fcMode").value,fcCur.id);
+  boxes[k]=ok?Math.min(4,(boxes[k]||0)+1):0; store.set("boxes",boxes); fcNext();
+}
+fcSel=chipGroup($("#fcChips"),"fcSel",["Lu","Di"],()=>fcNext());
+$("#fcMode").value=store.get("fcMode","lok");
+$("#fcMode").addEventListener("change",e=>{store.set("fcMode",e.target.value);fcNext();});
+$("#fcFlip").addEventListener("click",fcReveal);
+$("#fcYes").addEventListener("click",()=>fcGrade(true));
+$("#fcNo").addEventListener("click",()=>fcGrade(false));
+$("#fcReset").addEventListener("click",()=>{const mode=$("#fcMode").value;fcPool().forEach(p=>delete boxes[fcKey(mode,p.id)]);store.set("boxes",boxes);fcNext();});
+document.addEventListener("keydown",e=>{
+  if(location.hash!=="#lernkarten"||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+  if(e.key===" "){e.preventDefault();fcReveal();}
+  else if(e.key==="j"||e.key==="J") fcGrade(true);
+  else if(e.key==="n"||e.key==="N") fcGrade(false);
+});
+fcNext();
+
+/* ---------- QUIZ ---------- */
+let qzSel, qz=null;
+function makeQuestions(){
+  const pool=POINTS.filter(p=>qzSel().has(p.m)); if(pool.length<4) return null;
+  const qs=[];
+  const distract=(p,field)=>{
+    const same=pool.filter(x=>x.id!==p.id && x[field]!==p[field]);
+    const uniq=[...new Map(same.map(x=>[x[field],x])).values()];
+    return pick(uniq,3).map(x=>x[field]);
+  };
+  const gens=[
+    ()=>{const p=pick(pool,1)[0];return {q:`Welcher Punkt liegt hier: <em>${esc(p.lok)}</em>?`,a:p.id,opts:[p.id,...pick(pool.filter(x=>x.id!==p.id),3).map(x=>x.id)],p};},
+    ()=>{const p=pick(pool,1)[0];const d=distract(p,"lok");if(d.length<3)return null;return {q:`Wo liegt <em>${p.id}</em>?`,a:p.lok,opts:[p.lok,...d],p};},
+    ()=>{const p=pick(pool,1)[0];const d=distract(p,"re");if(d.length<3)return null;return {q:`Wie stellst du nach einem Treffer auf <em>${p.id}</em> wieder her?`,a:p.re,opts:[p.re,...d],p};},
+    ()=>{const p=pick(pool,1)[0];const d=distract(p,"wi");if(d.length<3)return null;return {q:`Welche Wirkung hat ein Treffer auf <em>${p.id}</em>?`,a:p.wi,opts:[p.wi,...d],p};},
+    ()=>{const imgs=pool.filter(p=>PPOS[p.id]);if(imgs.length<4)return null;const p=pick(imgs,1)[0];
+         const same=imgs.filter(x=>x.id!==p.id&&x.m===p.m);const others=pick(same.length>=3?same:imgs.filter(x=>x.id!==p.id),3).map(x=>x.id);
+         return {q:`Welcher Punkt ist im Bild markiert?`,img:p,a:p.id,opts:[p.id,...others],p};},
+    ()=>{const ms=[...new Set(pool.map(p=>p.m))].filter(m=>MER[m]);const m=pick(ms,1)[0];const r=MER[m];
+         const kind=pick(["el","yy","t"],1)[0];
+         if(kind==="el") return {q:`Zu welchem Element gehört der Meridian <em>${r.name}</em>?`,a:r.el,opts:ELEMENTS.map(e=>e.n).slice(0,5).filter(x=>x!==r.el).slice(0,3).concat(r.el),note:`${r.name}: Element ${r.el}.`};
+         if(kind==="yy") return {q:`Ist der Meridian <em>${r.name}</em> Yin oder Yang?`,a:r.yy,opts:["Yin","Yang"],note:"Eselsbrücke: Meridiane mit „a“ im Namen sind Yang."};
+         const a=fmtT(r.t);const alts=pick(MER_ORDER.filter(x=>x!==m),3).map(x=>fmtT(MER[x].t));
+         return {q:`Zu welcher Zeit hat der Meridian <em>${r.name}</em> laut Organuhr seine Hochphase?`,a,opts:[a,...alts],note:""};},
+    ()=>{const p=pick(pool,1)[0];const kinds=["Schlag- und Druckpunkt","Schlagpunkt"];if(!kinds.includes(p.akt))return null;
+         return {q:`<em>${p.id}</em>: Schlag- und Druckpunkt oder nur Schlagpunkt?`,a:p.akt,opts:kinds,p};}
+  ];
+  gens.push(()=>{const e=pick(ELEMENTS,1)[0];const kind=pick(["kill","dachi","rton","mton","finger","gen"],1)[0];
+    const lab={kill:`Welches Element <em>zerstört</em> ${e.n}?`,dachi:`Welcher Stand gehört zum Element <em>${e.n}</em>?`,rton:`Welcher Richtungston gehört zu <em>${e.n}</em>?`,
+      mton:`Welcher Meridianton gehört zu <em>${e.n}</em>?`,finger:`Welcher Finger steht für <em>${e.n}</em>?`,gen:`Welches Element <em>erzeugt</em> ${e.n} im Erzeugungszyklus?`};
+    if(kind==="kill"){const a=ELEMENTS.find(x=>x.kill===e.n).n;return {q:lab.kill,a,opts:[a,...pick(ELEMENTS.filter(x=>x.n!==a&&x.n!==e.n),3).map(x=>x.n)],note:`${a} zerstört ${e.n}.`};}
+    if(kind==="gen"){const a=ELEMENTS.find(x=>x.gen===e.n).n;return {q:lab.gen,a,opts:[a,...pick(ELEMENTS.filter(x=>x.n!==a&&x.n!==e.n),3).map(x=>x.n)],note:`${a} erzeugt ${e.n}.`};}
+    const a=e[kind];return {q:lab[kind],a,opts:[a,...pick(ELEMENTS.filter(x=>x!==e),3).map(x=>x[kind])],note:`${e.n}: ${e.dachi}, Richtungston ${e.rton}, Meridianton ${e.mton}.`};});
+  gens.push(()=>{const m=pick(MER_ORDER,1)[0];const r=MER[m];const a=String(r.n);
+    return {q:`Wie viele Punkte hat der Meridian <em>${r.name}</em>?`,a,opts:[a,...pick([...new Set(MER_ORDER.map(x=>String(MER[x].n)))].filter(x=>x!==a),3)],note:""};});
+  const weights=[3,2,3,2,3,2,1,2,1];
+  let guard=0;
+  while(qs.length<10 && guard++<200){
+    let r=Math.random()*weights.reduce((a,b)=>a+b,0),i=0;while(r>weights[i]){r-=weights[i];i++;}
+    const q=gens[i](); if(!q) continue;
+    if(qs.some(x=>x.q===q.q)) continue;
+    q.opts=shuffle([...new Set(q.opts)]); qs.push(q);
+  }
+  return qs;
+}
+function renderQuiz(){
+  const el=$("#qz");
+  if(!qz){el.innerHTML=`<div class="empty">Wähle mindestens einen Meridian mit vier oder mehr Punkten und starte eine Runde.</div>`;return;}
+  if(qz.i>=qz.qs.length){
+    const best=Math.max(store.get("best",0),qz.score); store.set("best",best);
+    const wrong=qz.log.filter(x=>!x.ok);
+    el.innerHTML=`<div class="qcard"><div class="score">${qz.score} / ${qz.qs.length}</div>
+      <p>${qz.score===qz.qs.length?"Fehlerfrei. Zeit für den nächsten Meridian.":qz.score>=7?"Gut. Wiederhole die Punkte unten mit den Lernkarten.":"Noch nicht sicher. Lies die Punkte unten im Atlas nach."}</p>
+      ${wrong.length?`<div class="tbl"><table><thead><tr><th>Frage</th><th>Richtig wäre</th></tr></thead><tbody>${wrong.map(w=>`<tr><td>${w.q}</td><td>${esc(w.a)}</td></tr>`).join("")}</tbody></table></div>`:""}
+      <div><button class="btn" type="button" id="qzAgain">Neue Runde</button></div></div>`;
+    $("#qzAgain").onclick=startQuiz; $("#qzBest").textContent=`Bestes Ergebnis: ${best} / 10`; return;
+  }
+  const q=qz.qs[qz.i];
+  el.innerHTML=`<div class="qcard">
+    <div class="qtop"><span>Frage ${qz.i+1} von ${qz.qs.length}</span><span>${qz.score} richtig</span></div>
+    <div class="qprog"><i style="width:${qz.i/qz.qs.length*100}%"></i></div>
+    <div class="qtext">${q.q}</div>
+    ${q.img?`<div class="qimg">${q.img.img?figure(q.img,false):animBlock(q.img)}</div>`:""}
+    <div class="opts" data-x="1">${q.opts.map((o,k)=>`<button type="button" class="opt" data-v="${esc(o)}"><span class="k">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+    <div class="feedback" id="qzFb" aria-live="polite"></div>
+    <div><button class="btn" type="button" id="qzNext" hidden>Weiter</button></div></div>`;
+  watchAnims(el);
+  el.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{
+    const ok=b.dataset.v===q.a;
+    el.querySelectorAll(".opt").forEach(x=>{x.disabled=true; if(x.dataset.v===q.a)x.classList.add("right");});
+    if(!ok) b.classList.add("wrong"); else qz.score++;
+    qz.log.push({q:q.q,a:q.a,ok});
+    let fb=ok?"Richtig.":"Leider falsch.";
+    if(q.p) fb+=` <b>${esc(q.p.id)}</b> · ${esc(q.p.lok)} · Richtung: ${esc(q.p.ri)} · Wirkung: ${esc(q.p.wi)}`;
+    if(q.note) fb+=" "+esc(q.note);
+    $("#qzFb").innerHTML=fb; const n=$("#qzNext"); n.hidden=false; n.focus();
+    n.onclick=()=>{qz.i++;renderQuiz();};
+  }));
+}
+function startQuiz(){const qs=makeQuestions(); qz=qs?{qs,i:0,score:0,log:[]}:null; renderQuiz();}
+qzSel=chipGroup($("#qzChips"),"qzSel",["Lu","Di"],()=>{});
+$("#qzStart").addEventListener("click",startQuiz);
+const b0=store.get("best",0); if(b0) $("#qzBest").textContent=`Bestes Ergebnis: ${b0} / 10`;
+startQuiz();
+
+/* ---------- EXAM ---------- */
+function showExam(k){
+  const idx=GRADES.findIndex(g=>g.k===k), g=GRADES[idx]; store.set("exam",k);
+  $("#exSel").innerHTML=GRADES.map(x=>`<button type="button" class="chip" data-k="${x.k}" aria-pressed="${x.k===k}"><span class="sw" style="background:${x.col}"></span>${x.name}</button>`).join("");
+  $("#exTitle").textContent=`${g.name} · ${g.belt}`;
+  const prev=GRADES.slice(0,idx);
+  const ptsRows=[];
+  GRADES.slice(0,idx+1).forEach(x=>{for(const m in x.pts){ptsRows.push(`<div class="${x===g?"new":""}"><b>${m}</b>${x.pts[m].join(", ")}</div>`);}});
+  const theory=[...new Set(GRADES.slice(0,idx+1).flatMap(x=>x.theory))];
+  const prevAtt=new Set(idx>0?GRADES[idx-1].att:[]);
+  $("#exBody").innerHTML=`
+    <div class="panel"><h3>Kata · Kihon <small>Pflicht</small></h3><ul>${g.kata.map(x=>`<li>${esc(x)}</li>`).join("")}<li>${g.kihon}, je Bahn 3–5 Einzeltechniken oder Kombinationen aus bzw. zur Kata</li></ul></div>
+    <div class="panel"><h3>Theorie <small>Pflicht</small></h3>
+      ${theory.length?`<ul style="margin-bottom:10px">${theory.map(t=>`<li class="${g.theory.includes(t)?"new":""}">${t}</li>`).join("")}</ul>`:""}
+      ${ptsRows.length?`<div class="pts">${ptsRows.join("")}</div>`:""}
+      ${g.kuatsu?`<p style="margin-top:10px" class="small"><b>${g.kuatsu}</b> Kuatsu-Variante${g.kuatsu>1?"n":""}</p>`:""}
+      ${idx>=1?`<p class="small muted" style="margin-top:4px">Theoriepunkte werden kumulativ geprüft.</p>`:""}
+    </div>
+    <div class="panel"><h3>Bunkai <small>Wahl</small></h3><ul><li><b>${g.bunkai}</b> Kata-Sequenzen</li><li>1 × Demonstration der Sequenz</li><li>1 × Bunkai langsam mit Erläuterung</li><li>1–2 × Bunkai schnell mit Kime</li></ul>${g.principles?`<p class="small" style="margin-top:10px">Zwingend: ${g.principles.join(" · ")}</p>`:""}</div>
+    <div class="panel"><h3>Selbstverteidigung <small>Wahl</small></h3><p class="small muted" style="margin-bottom:8px">${g.sv} Abwehr- und Kontertechnik${g.sv>1?"en":""} gegen:</p><ul>${g.att.map(a=>`<li class="${prevAtt.has(a)?"":"new"}">${esc(a)}</li>`).join("")}</ul></div>`;
+}
+$("#exSel").addEventListener("click",e=>{const b=e.target.closest("button"); if(b) showExam(b.dataset.k);});
+showExam(store.get("exam","8"));
+
+/* ---------- routing ---------- */
+const VIEWS=["start","grundlagen","kuatsu","punkte","lernkarten","quiz","pruefung"];
+function route(){
+  const h=location.hash.slice(1); const v=VIEWS.includes(h)?h:"start";
+  VIEWS.forEach(x=>$("#v-"+x).classList.toggle("on",x===v));
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+v?"page":"false"));
+  if(h && VIEWS.includes(h)) window.scrollTo({top:0});
+}
+window.addEventListener("hashchange",route); route();
+$("#statPts").textContent=POINTS.length;
+updateKnown();
+</script>
+</body>
+</html>
